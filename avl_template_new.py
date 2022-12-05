@@ -150,8 +150,7 @@ class AVLTreeList(object):
 	@returns: True if the list is empty, False otherwise
 	"""
 	def empty(self):
-		return None
-
+		return self.getRoot() is None
 
 	"""retrieves the value of the i'th item in the list
 
@@ -162,7 +161,15 @@ class AVLTreeList(object):
 	@returns: the the value of the i'th item in the list
 	"""
 	def retrieve(self, i):
-		return None
+		self.select(self.root, i+1)
+
+	def select(self, root, i):
+		left_node_size = root.left.size + 1
+		if left_node_size == i:
+			return root
+		elif left_node_size < i:
+			return self.select(root.left, i)
+		return self.select(root.right, i - left_node_size)
 
 	"""inserts val at position i in the list
 
@@ -267,5 +274,7 @@ class AVLTreeList(object):
 	"""
 	def getRoot(self):
 		return None
+
+
 
 
