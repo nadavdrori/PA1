@@ -91,7 +91,7 @@ class AVLNode(object):
     """
 
     def setLeft(self, node):
-        self.right = node
+        self.left = node
 
     """sets right child
 
@@ -184,15 +184,15 @@ class AVLTreeList(object):
     """
 
     def retrieve(self, i):
-        return self.select(self.root, i + 1)
+        return self.select(self.getRoot(), i + 1)
 
-    def select(self, root, i):
-        left_node_size = root.getLeft().getSize() + 1
+    def select(self, node, i):
+        left_node_size = node.getLeft().getSize() + 1
         if left_node_size == i:
-            return root
-        elif left_node_size < i:
-            return self.select(root.getLeft(), i)
-        return self.select(root.getRight(), i - left_node_size)
+            return node
+        elif left_node_size > i:
+            return self.select(node.getLeft(), i)
+        return self.select(node.getRight(), i - left_node_size)
 
     """inserts val at position i in the list
 
@@ -215,7 +215,7 @@ class AVLTreeList(object):
             elif i < self.length():
                 inserted_node = self.insert_in_middle(i, val)
         self.size += 1
-        #return self.rebalancing_tree(inserted_node)
+        return self.rebalancing_tree(inserted_node)
 
     """inserts val at middle position in the list
 
@@ -306,12 +306,12 @@ class AVLTreeList(object):
                 node.getParent().setRight(right_child)
             else:
                 node.getParent().setLeft(right_child)
-            node.setRight(right_child.getLeft())
-            right_child.setLeft(node)
-            self.update_height_and_size(node)
-            self.update_height_and_size(right_child)
-            if self.root == node:
-                self.root = right_child
+        node.setRight(right_child.getLeft())
+        right_child.setLeft(node)
+        self.update_height_and_size(node)
+        self.update_height_and_size(right_child)
+        if self.root == node:
+            self.root = right_child
 
     def update_height_and_size(self, node):
         node.setHeight(max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1)
