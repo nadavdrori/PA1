@@ -284,19 +284,13 @@ class AVLTreeList(object):
             else:
                 node.getParent().setRight(left_child)
         node.setLeft(left_child.getRight())
+        node.getLeft().setParent(node)
         left_child.setRight(node)
+        left_child.getRight().setParent(left_child)
         self.update_height_and_size(node)
         self.update_height_and_size(left_child)
         if self.root == node:
             self.root = left_child
-
-    def left_right_rotation(self, node):
-        self.left_rotation(node.getLeft())
-        self.right_rotation(node)
-
-    def right_left_rotation(self, node):
-        self.right_rotation(node.getRight())
-        self.left_rotation(node)
 
     def left_rotation(self, node):
         right_child = node.getRight()
@@ -307,11 +301,21 @@ class AVLTreeList(object):
             else:
                 node.getParent().setLeft(right_child)
         node.setRight(right_child.getLeft())
+        node.getRight().setParent(node)
         right_child.setLeft(node)
+        right_child.getLeft().setParent(right_child)
         self.update_height_and_size(node)
         self.update_height_and_size(right_child)
         if self.root == node:
             self.root = right_child
+
+    def left_right_rotation(self, node):
+        self.left_rotation(node.getLeft())
+        self.right_rotation(node)
+
+    def right_left_rotation(self, node):
+        self.right_rotation(node.getRight())
+        self.left_rotation(node)
 
     def update_height_and_size(self, node):
         node.setHeight(max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1)
@@ -328,31 +332,43 @@ class AVLTreeList(object):
 
     def delete(self, i):
         node = self.retrieve(i)
-        if node.getLeft().getValue() is None and node.getRight().getValue() is None:
+        if (not node.getLeft().isRealNode()) and (not node.getRight().isRealNode()):
             self.delete_leaf(node)
-        elif node.getLeft().getValue() is None or node.getRight().getValue() is None:
-            if node.getParent().getLeft() == node:
-                if node.getLeft().getValue() is not None:
-                    node.getLeft().setParent(node.getParent())
-                    node.getParent().setLeft(node.getLeft)
-                else:
-                    node.getRight().setParent(node.getParent())
-                    node.getParent().setLeft(node.getLeft)
-            else:
-                if node.getLeft().getValue() is not None:
-                    node.getLeft().setParent(node.getParent())
-                    node.getParent().setRight(node.getLeft)
-                else:
-                    node.getRight().setParent(node.getParent())
-                    node.getParent().setRight(node.getLeft)
+        elif (not node.getLeft().isRealNode()) or (not node.getRight().isRealNode()):
+            self.delete_one_child(node)
         else:
             self.delete_two_childs(node)
+
+    def delete_one_child(self, node):
+        if node.getParent().getLeft() == node:
+            self.connect_to_left_of_parent(node)
+        else:
+            self.connect_to_right_of_parent(node)
+
+    def connect_to_right_of_parent(self, node):
+        if node.getLeft().getValue() is not None:
+            node.getLeft().setParent(node.getParent())
+            node.getParent().setRight(node.getLeft)
+        else:
+            node.getRight().setParent(node.getParent())
+            node.getParent().setRight(node.getLeft)
+
+    def connect_to_left_of_parent(self, node):
+        if node.getLeft().getValue() is not None:
+            node.getLeft().setParent(node.getParent())
+            node.getParent().setLeft(node.getLeft)
+        else:
+            node.getRight().setParent(node.getParent())
+            node.getParent().setLeft(node.getLeft)
 
     def delete_leaf(self, node):
         if node.getParent().getLeft() == node:
             node.getParent().setLeft(AVLNode(None, node.getParent()))
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
+
+    def delete_two_childs(self, node):
+        pass
 
     """returns the value of the first item in the list
 
