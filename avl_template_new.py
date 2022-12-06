@@ -129,6 +129,15 @@ class AVLNode(object):
     def setHeight(self, h):
         self.height = h
 
+    """sets the size of the subtree of the node (inclusive)
+
+       @type size: int
+       @param size: the size
+       """
+
+    def setSize(self, size):
+        self.size = size
+
     """returns whether self is not a virtual node 
 
     @rtype: bool
@@ -156,9 +165,6 @@ class AVLTreeList(object):
 
     # add your fields here
 
-    def length(self):
-        return self.size
-
     """returns whether the list is empty
 
     @rtype: bool
@@ -181,12 +187,12 @@ class AVLTreeList(object):
         return self.select(self.root, i + 1)
 
     def select(self, root, i):
-        left_node_size = root.left.size + 1
+        left_node_size = root.getLeft().getSize() + 1
         if left_node_size == i:
             return root
         elif left_node_size < i:
-            return self.select(root.left, i)
-        return self.select(root.right, i - left_node_size)
+            return self.select(root.getLeft(), i)
+        return self.select(root.getRight(), i - left_node_size)
 
     """inserts val at position i in the list
 
@@ -202,13 +208,14 @@ class AVLTreeList(object):
     def insert(self, i, val):
         if self.empty():
             self.root = AVLNode(val)
+            inserted_node = self.root
         else:
             if i == self.length():
                 inserted_node = self.insertLast(val)
             elif i < self.length():
                 inserted_node = self.insert_in_middle(i, val)
         self.size += 1
-        return rebalancing_tree(inserted_node)
+        #return self.rebalancing_tree(inserted_node)
 
     """inserts val at middle position in the list
 
@@ -220,15 +227,15 @@ class AVLTreeList(object):
 
     def insert_in_middle(self, i, val):
         curr_node = self.retrieve(i)
-        if curr_node.left is None:
-            curr_node.left = AVLNode(val)
-            curr_node.left.parent = curr_node
-            return curr_node.left
+        if curr_node.getLeft().getValue() is None:
+            curr_node.setLeft(AVLNode(val))
+            curr_node.getLeft().setParent(curr_node)
+            return curr_node.getLeft()
         else:
             pred = self.retrieve(i - 1)  # TODO - compare complexity retrieve\predecessor function
-            pred.right = AVLNode(val)
-            pred.right.parent = pred
-            return pred.right
+            pred.setRight(AVLNode(val))
+            pred.getRight().setParent(pred)
+            return pred.getRight()
 
     """inserts val at last position in the list
 
@@ -239,12 +246,12 @@ class AVLTreeList(object):
         """
 
     def insertLast(self, val):
-        curr_node = self.root
-        while curr_node.right is not None:
-            curr_node = curr_node.right
-        curr_node.right = AVLNode(val)
-        curr_node.right.parent = curr_node
-        return curr_node.right
+        curr_node = self.getRoot()
+        while curr_node.getRight().getValue() is not None:
+            curr_node = curr_node.getRight()
+        curr_node.setRight(AVLNode(val))
+        curr_node.getRight().setParent(curr_node)
+        return curr_node.getRight()
 
     def rebalancing_tree(self, node):
         rebalancing_count = 0
@@ -356,7 +363,7 @@ class AVLTreeList(object):
     """
 
     def length(self):
-        return None
+        return self.size
 
     """sort the info values of the list
 
@@ -405,4 +412,4 @@ class AVLTreeList(object):
     """
 
     def getRoot(self):
-        return None
+        return self.root
