@@ -327,7 +327,32 @@ class AVLTreeList(object):
     """
 
     def delete(self, i):
-        return -1
+        node = self.retrieve(i)
+        if node.getLeft().getValue() is None and node.getRight().getValue() is None:
+            self.delete_leaf(node)
+        elif node.getLeft().getValue() is None or node.getRight().getValue() is None:
+            if node.getParent().getLeft() == node:
+                if node.getLeft().getValue() is not None:
+                    node.getLeft().setParent(node.getParent())
+                    node.getParent().setLeft(node.getLeft)
+                else:
+                    node.getRight().setParent(node.getParent())
+                    node.getParent().setLeft(node.getLeft)
+            else:
+                if node.getLeft().getValue() is not None:
+                    node.getLeft().setParent(node.getParent())
+                    node.getParent().setRight(node.getLeft)
+                else:
+                    node.getRight().setParent(node.getParent())
+                    node.getParent().setRight(node.getLeft)
+        else:
+            self.delete_two_childs(node)
+
+    def delete_leaf(self, node):
+        if node.getParent().getLeft() == node:
+            node.getParent().setLeft(AVLNode(None, node.getParent()))
+        else:
+            node.getParent().setRight(AVLNode(None, node.getParent()))
 
     """returns the value of the first item in the list
 
