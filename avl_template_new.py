@@ -217,6 +217,7 @@ class AVLTreeList(object):
             @rtype: AVLNode
             @returns: the inserted node
             """
+
     def insert_in_middle(self, i, val):
         curr_node = self.retrieve(i)
         if curr_node.left is None:
@@ -269,18 +270,41 @@ class AVLTreeList(object):
 
     def right_rotation(self, node):
         left_child = node.getLeft()
-        left_child.parent = node.parent
-        if node.parent is not None:
-            if node.parent.getLeft() == node:
-                node.parent.setLeft(left_child)
+        left_child.setParent(node.parent)
+        if node.getParent() is not None:
+            if node.getParent().getLeft() == node:
+                node.getParent().setLeft(left_child)
             else:
-                node.parent.setRight(left_child)
+                node.getParent().setRight(left_child)
         node.setLeft(left_child.getRight())
         left_child.setRight(node)
         self.update_height_and_size(node)
         self.update_height_and_size(left_child)
         if self.root == node:
             self.root = left_child
+
+    def left_right_rotation(self, node):
+        self.left_rotation(node.getLeft())
+        self.right_rotation(node)
+
+    def right_left_rotation(self, node):
+        self.right_rotation(node.getRight())
+        self.left_rotation(node)
+
+    def left_rotation(self, node):
+        right_child = node.getRight()
+        right_child.setParent(node.getParent())
+        if node.getParent() is not None:
+            if node.getParent().getRight() == node:
+                node.getParent().setRight(right_child)
+            else:
+                node.getParent().setLeft(right_child)
+            node.setRight(right_child.getLeft())
+            right_child.setLeft(node)
+            self.update_height_and_size(node)
+            self.update_height_and_size(right_child)
+            if self.root == node:
+                self.root = right_child
 
     def update_height_and_size(self, node):
         node.setHeight(max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1)
