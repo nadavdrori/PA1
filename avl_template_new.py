@@ -1,322 +1,338 @@
-#username - nadavdrori
-#id1      - 208935882
-#name1    - Nadav Drori
-#id2      - 318900883
-#name2    - Omer Talmi
-
+# username - nadavdrori
+# id1      - 208935882
+# name1    - Nadav Drori
+# id2      - 318900883
+# name2    - Omer Talmi
 
 
 """A class represnting a node in an AVL tree"""
 
+
 class AVLNode(object):
-	"""Constructor, you are allowed to add more fields. 
+    """Constructor, you are allowed to add more fields.
 
-	@type value: str
-	@param value: data of your node
-	"""
-	def __init__(self, value):
-		self.value = value
-		self.left = None
-		self.right = None
-		self.parent = None
-		self.height = -1  # Balance factor
-		self.size = 1
-		
+    @type value: str
+    @param value: data of your node
+    """
 
-	"""returns the left child
-	@rtype: AVLNode
-	@returns: the left child of self, None if there is no left child
-	"""
-	def getLeft(self):
-		return self.left
+    def __init__(self, value):
+        self.value = value
+        self.left = AVLNode(self)
+        self.right = AVLNode(self)
+        self.parent = None
+        self.height = 0
+        self.size = 1
 
+    def __init__(self, parent):
+        self.value = None
+        self.left = None
+        self.right = None
+        self.parent = parent
+        self.height = -1
+        self.size = 0
 
-	"""returns the right child
+    """returns the left child
+    @rtype: AVLNode
+    @returns: the left child of self, None if there is no left child
+    """
 
-	@rtype: AVLNode
-	@returns: the right child of self, None if there is no right child
-	"""
-	def getRight(self):
-		return self.right
+    def getLeft(self):
+        return self.left
 
-	"""returns the parent 
+    """returns the right child
 
-	@rtype: AVLNode
-	@returns: the parent of self, None if there is no parent
-	"""
-	def getParent(self):
-		return self.parent
+    @rtype: AVLNode
+    @returns: the right child of self, None if there is no right child
+    """
 
-	"""return the value
+    def getRight(self):
+        return self.right
 
-	@rtype: str
-	@returns: the value of self, None if the node is virtual
-	"""
-	def getValue(self):
-		if self.isRealNode():
-			return self.value
-		return None
+    """returns the parent 
 
-	"""returns the height
+    @rtype: AVLNode
+    @returns: the parent of self, None if there is no parent
+    """
 
-	@rtype: int
-	@returns: the height of self, -1 if the node is virtual
-	"""
-	def getHeight(self):
-		# TODO: Handle virtual node
-		return self.height
+    def getParent(self):
+        return self.parent
 
-	"""returns the size
+    """return the value
 
-		@rtype: int
-		@returns: the size of self, 0 if the node is virtual
-		"""
-	def getSize(self):
-		# TODO: Handle virtual node
-		if self.isRealNode():
-			return self.size
-		return 0
+    @rtype: str
+    @returns: the value of self, None if the node is virtual
+    """
 
-	"""sets left child
+    def getValue(self):
+        return self.value
 
-	@type node: AVLNode
-	@param node: a node
-	"""
-	def setLeft(self, node):
-		self.right = node
+    """returns the height
 
-	"""sets right child
+    @rtype: int
+    @returns: the height of self, -1 if the node is virtual
+    """
 
-	@type node: AVLNode
-	@param node: a node
-	"""
-	def setRight(self, node):
-		self.right = node
+    def getHeight(self):
+        return self.height
 
-	"""sets parent
+    """returns the size
 
-	@type node: AVLNode
-	@param node: a node
-	"""
-	def setParent(self, node):
-		self.parent = node
+        @rtype: int
+        @returns: the size of self, 0 if the node is virtual
+        """
 
-	"""sets value
+    def getSize(self):
+        return self.size
 
-	@type value: str
-	@param value: data
-	"""
-	def setValue(self, value):
-		self.value = value
+    """sets left child
 
-	"""sets the balance factor of the node
+    @type node: AVLNode
+    @param node: a node
+    """
 
-	@type h: int
-	@param h: the height
-	"""
-	def setHeight(self, h):
-		self.height = h
+    def setLeft(self, node):
+        self.right = node
 
-	"""returns whether self is not a virtual node 
+    """sets right child
 
-	@rtype: bool
-	@returns: False if self is a virtual node, True otherwise.
-	"""
-	def isRealNode(self):
-		# TODO: check if virtual
-		return False
+    @type node: AVLNode
+    @param node: a node
+    """
 
+    def setRight(self, node):
+        self.right = node
+
+    """sets parent
+
+    @type node: AVLNode
+    @param node: a node
+    """
+
+    def setParent(self, node):
+        self.parent = node
+
+    """sets value
+
+    @type value: str
+    @param value: data
+    """
+
+    def setValue(self, value):
+        self.value = value
+
+    """sets the balance factor of the node
+
+    @type h: int
+    @param h: the height
+    """
+
+    def setHeight(self, h):
+        self.height = h
+
+    """returns whether self is not a virtual node 
+
+    @rtype: bool
+    @returns: False if self is a virtual node, True otherwise.
+    """
+
+    def isRealNode(self):
+        return self.value is not None
 
 
 """
 A class implementing the ADT list, using an AVL tree.
 """
 
+
 class AVLTreeList(object):
+    """
+    Constructor, you are allowed to add more fields.
 
-	"""
-	Constructor, you are allowed to add more fields.  
+    """
 
-	"""
-	def __init__(self):
-		self.size = 0
-		self.root = None
-		# add your fields here
+    def __init__(self):
+        self.size = 0
+        self.root = None
 
-	def length(self):
-		return self.size
+    # add your fields here
 
+    def length(self):
+        return self.size
 
-	"""returns whether the list is empty
+    """returns whether the list is empty
 
-	@rtype: bool
-	@returns: True if the list is empty, False otherwise
-	"""
-	def empty(self):
-		return self.getRoot() is None
+    @rtype: bool
+    @returns: True if the list is empty, False otherwise
+    """
 
-	"""retrieves the value of the i'th item in the list
+    def empty(self):
+        return self.getRoot() is None
 
-	@type i: int
-	@pre: 0 <= i < self.length()
-	@param i: index in the list
-	@rtype: str
-	@returns: the the value of the i'th item in the list
-	"""
-	def retrieve(self, i):
-		self.select(self.root, i+1)
+    """retrieves the value of the i'th item in the list
 
-	def select(self, root, i):
-		# TODO: Fail in leaves, no need to check if the node is leave
-		left_node_size = root.left.size + 1
-		if left_node_size == i:
-			return root
-		elif left_node_size < i:
-			return self.select(root.left, i)
-		return self.select(root.right, i - left_node_size)
+    @type i: int
+    @pre: 0 <= i < self.length()
+    @param i: index in the list
+    @rtype: str
+    @returns: the the value of the i'th item in the list
+    """
 
-	"""inserts val at position i in the list
+    def retrieve(self, i):
+        self.select(self.root, i + 1)
 
-	@type i: int
-	@pre: 0 <= i <= self.length()
-	@param i: The intended index in the list to which we insert val
-	@type val: str
-	@param val: the value we inserts
-	@rtype: list
-	@returns: the number of rebalancing operation due to AVL rebalancing
-	"""
-	def insert(self, i, val):
-		if self.empty():
-			self.root = AVLNode(val)
-			self.size += 1
-			return 0
-		else:
-			if i == self.length():
-				# TODO - implement balancing insert last
-				self.insertLast(val)
-			elif i < self.length():
-				curr_node = self.retrieve(i)
-				if curr_node.left is None:
-					curr_node.left = AVLNode(val)
-					curr_node.left.parent = curr_node
-					self.size += 1
-					return 0  # TODO - implement rebalancing function
-				else:
-					pred = self.retrieve(i-1)	 # TODO - compare complexity retrieve\predecessor function
-					pred.right = AVLNode(val)
-					pred.right.parent = pred
-					self.size += 1
-					return 0 # TODO - implement rebalancing function
+    def select(self, root, i):
+        # TODO: Fail in leaves, no need to check if the node is leave
+        left_node_size = root.left.size + 1
+        if left_node_size == i:
+            return root
+        elif left_node_size < i:
+            return self.select(root.left, i)
+        return self.select(root.right, i - left_node_size)
 
-	"""inserts val at last position in the list
+    """inserts val at position i in the list
 
-		@type val: str
-		@param val: the value we inserts
-		@rtype: list
-		@returns: the number of rebalancing operation due to AVL rebalancing
-		"""
-	def insertLast(self, val):
-		curr_node = self.root
-		while curr_node.right is not None:
-			curr_node = curr_node.right
-		curr_node.right = AVLNode(val)
-		curr_node.right.parent = curr_node
-		self.size += 1
-		return 0
+    @type i: int
+    @pre: 0 <= i <= self.length()
+    @param i: The intended index in the list to which we insert val
+    @type val: str
+    @param val: the value we inserts
+    @rtype: list
+    @returns: the number of rebalancing operation due to AVL rebalancing
+    """
 
+    def insert(self, i, val):
+        if self.empty():
+            self.root = AVLNode(val)
+            self.size += 1
+            return 0
+        else:
+            if i == self.length():
+                # TODO - implement balancing insert last
+                self.insertLast(val)
+            elif i < self.length():
+                curr_node = self.retrieve(i)
+                if curr_node.left is None:
+                    curr_node.left = AVLNode(val)
+                    curr_node.left.parent = curr_node
+                    self.size += 1
+                    return 0  # TODO - implement rebalancing function
+                else:
+                    pred = self.retrieve(i - 1)  # TODO - compare complexity retrieve\predecessor function
+                    pred.right = AVLNode(val)
+                    pred.right.parent = pred
+                    self.size += 1
+                    return 0  # TODO - implement rebalancing function
 
-	"""deletes the i'th item in the list
+    """inserts val at last position in the list
 
-	@type i: int
-	@pre: 0 <= i < self.length()
-	@param i: The intended index in the list to be deleted
-	@rtype: int
-	@returns: the number of rebalancing operation due to AVL rebalancing
-	"""
-	def delete(self, i):
-		return -1
+        @type val: str
+        @param val: the value we inserts
+        @rtype: list
+        @returns: the number of rebalancing operation due to AVL rebalancing
+        """
 
+    def insertLast(self, val):
+        curr_node = self.root
+        while curr_node.right is not None:
+            curr_node = curr_node.right
+        curr_node.right = AVLNode(val)
+        curr_node.right.parent = curr_node
+        self.size += 1
+        return 0
 
-	"""returns the value of the first item in the list
+    """deletes the i'th item in the list
 
-	@rtype: str
-	@returns: the value of the first item, None if the list is empty
-	"""
-	def first(self):
-		return None
+    @type i: int
+    @pre: 0 <= i < self.length()
+    @param i: The intended index in the list to be deleted
+    @rtype: int
+    @returns: the number of rebalancing operation due to AVL rebalancing
+    """
 
-	"""returns the value of the last item in the list
+    def delete(self, i):
+        return -1
 
-	@rtype: str
-	@returns: the value of the last item, None if the list is empty
-	"""
-	def last(self):
-		return None
+    """returns the value of the first item in the list
 
-	"""returns an array representing list 
+    @rtype: str
+    @returns: the value of the first item, None if the list is empty
+    """
 
-	@rtype: list
-	@returns: a list of strings representing the data structure
-	"""
-	def listToArray(self):
-		return None
+    def first(self):
+        return None
 
-	"""returns the size of the list 
+    """returns the value of the last item in the list
 
-	@rtype: int
-	@returns: the size of the list
-	"""
-	def length(self):
-		return None
+    @rtype: str
+    @returns: the value of the last item, None if the list is empty
+    """
 
-	"""sort the info values of the list
+    def last(self):
+        return None
 
-	@rtype: list
-	@returns: an AVLTreeList where the values are sorted by the info of the original list.
-	"""
-	def sort(self):
-		return None
+    """returns an array representing list 
 
-	"""permute the info values of the list 
+    @rtype: list
+    @returns: a list of strings representing the data structure
+    """
 
-	@rtype: list
-	@returns: an AVLTreeList where the values are permuted randomly by the info of the original list. ##Use Randomness
-	"""
-	def permutation(self):
-		return None
+    def listToArray(self):
+        return None
 
-	"""concatenates lst to self
+    """returns the size of the list 
 
-	@type lst: AVLTreeList
-	@param lst: a list to be concatenated after self
-	@rtype: int
-	@returns: the absolute value of the difference between the height of the AVL trees joined
-	"""
-	def concat(self, lst):
-		return None
+    @rtype: int
+    @returns: the size of the list
+    """
 
-	"""searches for a *value* in the list
+    def length(self):
+        return None
 
-	@type val: str
-	@param val: a value to be searched
-	@rtype: int
-	@returns: the first index that contains val, -1 if not found.
-	"""
-	def search(self, val):
-		return None
+    """sort the info values of the list
 
+    @rtype: list
+    @returns: an AVLTreeList where the values are sorted by the info of the original list.
+    """
 
+    def sort(self):
+        return None
 
-	"""returns the root of the tree representing the list
+    """permute the info values of the list 
 
-	@rtype: AVLNode
-	@returns: the root, None if the list is empty
-	"""
-	def getRoot(self):
-		return None
+    @rtype: list
+    @returns: an AVLTreeList where the values are permuted randomly by the info of the original list. ##Use Randomness
+    """
 
+    def permutation(self):
+        return None
 
+    """concatenates lst to self
 
+    @type lst: AVLTreeList
+    @param lst: a list to be concatenated after self
+    @rtype: int
+    @returns: the absolute value of the difference between the height of the AVL trees joined
+    """
 
+    def concat(self, lst):
+        return None
 
+    """searches for a *value* in the list
 
+    @type val: str
+    @param val: a value to be searched
+    @rtype: int
+    @returns: the first index that contains val, -1 if not found.
+    """
+
+    def search(self, val):
+        return None
+
+    """returns the root of the tree representing the list
+
+    @rtype: AVLNode
+    @returns: the root, None if the list is empty
+    """
+
+    def getRoot(self):
+        return None
