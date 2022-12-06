@@ -167,7 +167,8 @@ class AVLTreeList(object):
 		self.select(self.root, i+1)
 
 	def select(self, root, i):
-		left_node_size = root.left.	size + 1
+		# TODO: Fail in leaves, no need to check if the node is leave
+		left_node_size = root.left.size + 1
 		if left_node_size == i:
 			return root
 		elif left_node_size < i:
@@ -191,7 +192,7 @@ class AVLTreeList(object):
 			return 0
 		else:
 			if i == self.length():
-				# TODO - implement insert last
+				# TODO - implement balancing insert last
 				self.insertLast(val)
 			elif i < self.length():
 				curr_node = self.retrieve(i)
@@ -199,13 +200,29 @@ class AVLTreeList(object):
 					curr_node.left = AVLNode(val)
 					curr_node.left.parent = curr_node
 					self.size += 1
+					return 0  # TODO - implement rebalancing function
+				else:
+					pred = self.retrieve(i-1)	 # TODO - compare complexity retrieve\predecessor function
+					pred.right = AVLNode(val)
+					pred.right.parent = pred
+					self.size += 1
 					return 0 # TODO - implement rebalancing function
-			else:
-				pred = self.predecessor(i)	 # TODO - implement predecessor function
-				pred.right = AVLNode(val)
-				pred.right.parent = pred
-				self.size += 1
-				return 0 # TODO - implement rebalancing function
+
+	"""inserts val at last position in the list
+
+		@type val: str
+		@param val: the value we inserts
+		@rtype: list
+		@returns: the number of rebalancing operation due to AVL rebalancing
+		"""
+	def insertLast(self, val):
+		curr_node = self.root
+		while curr_node.right is not None:
+			curr_node = curr_node.right
+		curr_node.right = AVLNode(val)
+		curr_node.right.parent = curr_node
+		self.size += 1
+		return 0
 
 
 	"""deletes the i'th item in the list
