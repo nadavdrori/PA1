@@ -181,7 +181,6 @@ class AVLTreeList(object):
         return self.select(self.root, i + 1)
 
     def select(self, root, i):
-        # TODO: Fail in leaves, no need to check if the node is leave
         left_node_size = root.left.size + 1
         if left_node_size == i:
             return root
@@ -203,32 +202,39 @@ class AVLTreeList(object):
     def insert(self, i, val):
         if self.empty():
             self.root = AVLNode(val)
-            self.size += 1
-            return 0
         else:
             if i == self.length():
-                # TODO - implement balancing insert last
-                self.insertLast(val)
+                inserted_node = self.insertLast(val)
             elif i < self.length():
-                curr_node = self.retrieve(i)
-                if curr_node.left is None:
-                    curr_node.left = AVLNode(val)
-                    curr_node.left.parent = curr_node
-                    self.size += 1
-                    return 0  # TODO - implement rebalancing function
-                else:
-                    pred = self.retrieve(i - 1)  # TODO - compare complexity retrieve\predecessor function
-                    pred.right = AVLNode(val)
-                    pred.right.parent = pred
-                    self.size += 1
-                    return 0  # TODO - implement rebalancing function
+                inserted_node = self.insert_in_middle(i, val)
+        self.size += 1
+        return rebalancing_tree(inserted_node)
+
+    """inserts val at middle position in the list
+
+            @type val: str
+            @param val: the value we inserts
+            @rtype: AVLNode
+            @returns: the inserted node
+            """
+    def insert_in_middle(self, i, val):
+        curr_node = self.retrieve(i)
+        if curr_node.left is None:
+            curr_node.left = AVLNode(val)
+            curr_node.left.parent = curr_node
+            return curr_node.left
+        else:
+            pred = self.retrieve(i - 1)  # TODO - compare complexity retrieve\predecessor function
+            pred.right = AVLNode(val)
+            pred.right.parent = pred
+            return pred.right
 
     """inserts val at last position in the list
 
         @type val: str
         @param val: the value we inserts
-        @rtype: list
-        @returns: the number of rebalancing operation due to AVL rebalancing
+        @rtype: AVLNode
+        @returns: the inserted node
         """
 
     def insertLast(self, val):
@@ -237,8 +243,49 @@ class AVLTreeList(object):
             curr_node = curr_node.right
         curr_node.right = AVLNode(val)
         curr_node.right.parent = curr_node
-        self.size += 1
-        return 0
+        return curr_node.right
+
+    def rebalancing_tree(self, node):
+        rebalancing_count = 0
+        while node is not None:
+            node.height = max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1
+            node.size = node.getLeft().getSize() + node.getRight().getSize() + 1
+            if abs(node.getLeft().getHeight() - node.getRight().getHeight()) > 1:
+                rebalancing_count += 1
+                self.rebalance(node)
+            node = node.parent
+        return rebalancing_count
+
+    def rebalance(self, node):
+        if node.getLeft().getHeight() > node.getRight().getHeight():
+            if node.getLeft().getLeft().getHeight() > node.getLeft().getRight().getHeight():
+                self.right_rotation(node)
+            else:
+                self.left_right_rotation(node)
+        else:
+            if node.getRight().getRight().getHeight() > node.getRight().getLeft().getHeight():
+                self.left_rotation(node)
+            else:
+                self.right_left_rotation(node)
+
+    def right_rotation(self, node):
+        left_child = node.getLeft()
+        left_child.parent = node.parent
+        if node.parent is not None:
+            if node.parent.getLeft() == node:
+                node.parent.setLeft(left_child)
+            else:
+                node.parent.setRight(left_child)
+        node.setLeft(left_child.getRight())
+        left_child.setRight(node)
+        # TODO: extract below to method and use getters and setters
+        node.height = max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1
+        node.size = node.getLeft().getSize() + node.getRight().getSize() + 1
+        left_child.height = max(left_child.getLeft().getHeight(), left_child.getRight().getHeight()) + 1
+        left_child.size = left_child.getLeft().getSize() + left_child.getRight().getSize() + 1
+        if self.root == node:
+            self.root = left_child
+
 
     """deletes the i'th item in the list
 
