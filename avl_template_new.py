@@ -15,21 +15,21 @@ class AVLNode(object):
     @param value: data of your node
     """
 
-    def __init__(self, value):
-        self.value = value
-        self.left = AVLNode(self)
-        self.right = AVLNode(self)
-        self.parent = None
-        self.height = 0
-        self.size = 1
-
-    def __init__(self, parent):
-        self.value = None
-        self.left = None
-        self.right = None
-        self.parent = parent
-        self.height = -1
-        self.size = 0
+    def __init__(self, value, parent=None):
+        if value is not None:
+            self.value = value
+            self.left = AVLNode(None, self)
+            self.right = AVLNode(None, self)
+            self.parent = None
+            self.height = 0
+            self.size = 1
+        else:
+            self.value = None
+            self.left = None
+            self.right = None
+            self.parent = parent
+            self.height = -1
+            self.size = 0
 
     """returns the left child
     @rtype: AVLNode
@@ -178,7 +178,7 @@ class AVLTreeList(object):
     """
 
     def retrieve(self, i):
-        self.select(self.root, i + 1)
+        return self.select(self.root, i + 1)
 
     def select(self, root, i):
         # TODO: Fail in leaves, no need to check if the node is leave
