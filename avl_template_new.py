@@ -143,6 +143,9 @@ class AVLTreeList(object):
 		self.root = None
 		# add your fields here
 
+	def length(self):
+		return self.size
+
 
 	"""returns whether the list is empty
 
@@ -164,7 +167,7 @@ class AVLTreeList(object):
 		self.select(self.root, i+1)
 
 	def select(self, root, i):
-		left_node_size = root.left.size + 1
+		left_node_size = root.left.	size + 1
 		if left_node_size == i:
 			return root
 		elif left_node_size < i:
@@ -182,7 +185,27 @@ class AVLTreeList(object):
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
 	def insert(self, i, val):
-		return -1
+		if self.empty():
+			self.root = AVLNode(val)
+			self.size += 1
+			return 0
+		else:
+			if i == self.length():
+				# TODO - implement insert last
+				self.insertLast(val)
+			elif i < self.length():
+				curr_node = self.retrieve(i)
+				if curr_node.left is None:
+					curr_node.left = AVLNode(val)
+					curr_node.left.parent = curr_node
+					self.size += 1
+					return 0 # TODO - implement rebalancing function
+			else:
+				pred = self.predecessor(i)	 # TODO - implement predecessor function
+				pred.right = AVLNode(val)
+				pred.right.parent = pred
+				self.size += 1
+				return 0 # TODO - implement rebalancing function
 
 
 	"""deletes the i'th item in the list
@@ -274,6 +297,8 @@ class AVLTreeList(object):
 	"""
 	def getRoot(self):
 		return None
+
+
 
 
 
