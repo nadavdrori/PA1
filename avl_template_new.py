@@ -248,8 +248,7 @@ class AVLTreeList(object):
     def rebalancing_tree(self, node):
         rebalancing_count = 0
         while node is not None:
-            node.height = max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1
-            node.size = node.getLeft().getSize() + node.getRight().getSize() + 1
+            self.update_height_and_size(node)
             if abs(node.getLeft().getHeight() - node.getRight().getHeight()) > 1:
                 rebalancing_count += 1
                 self.rebalance(node)
@@ -278,14 +277,14 @@ class AVLTreeList(object):
                 node.parent.setRight(left_child)
         node.setLeft(left_child.getRight())
         left_child.setRight(node)
-        # TODO: extract below to method and use getters and setters
-        node.height = max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1
-        node.size = node.getLeft().getSize() + node.getRight().getSize() + 1
-        left_child.height = max(left_child.getLeft().getHeight(), left_child.getRight().getHeight()) + 1
-        left_child.size = left_child.getLeft().getSize() + left_child.getRight().getSize() + 1
+        self.update_height_and_size(node)
+        self.update_height_and_size(left_child)
         if self.root == node:
             self.root = left_child
 
+    def update_height_and_size(self, node):
+        node.setHeight(max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1)
+        node.setSize(node.getLeft().getSize() + node.getRight().getSize() + 1)
 
     """deletes the i'th item in the list
 
