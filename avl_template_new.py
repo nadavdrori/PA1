@@ -336,7 +336,7 @@ class AVLTreeList(object):
         elif (not node.getLeft().isRealNode()) or (not node.getRight().isRealNode()):
             self.delete_one_child(node)
         else:
-            self.delete_two_childs(node)
+            self.delete_two_childs(node, i)
 
     def delete_one_child(self, node):
         if node.getLeft().getValue() is not None:
@@ -355,8 +355,18 @@ class AVLTreeList(object):
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
 
-    def delete_two_childs(self, node):
-        pass
+    def delete_two_childs(self, node, i):
+        successor = self.retrieve(i + 1)
+        self.delete(i+1)
+        self.successor_replacment(node, successor)
+
+
+    def successor_replacment(self, node, successor):
+        if node.getParent().getLeft() == node:
+            node.getParent().setLeft(successor)
+        else:
+            node.getParent().setRight(successor)
+        successor.setParent(node.getParent())
 
     """returns the value of the first item in the list
 
