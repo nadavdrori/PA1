@@ -339,26 +339,15 @@ class AVLTreeList(object):
             self.delete_two_childs(node)
 
     def delete_one_child(self, node):
+        if node.getLeft().getValue() is not None:
+            node_to_connect = node.getLeft()
+        else:
+            node_to_connect = node.getRight()
+        node_to_connect.setParent(node.getParent())
         if node.getParent().getLeft() == node:
-            self.connect_to_left_of_parent(node)
+            node.getParent().setLeft(node_to_connect)
         else:
-            self.connect_to_right_of_parent(node)
-
-    def connect_to_right_of_parent(self, node):
-        if node.getLeft().getValue() is not None:
-            node.getLeft().setParent(node.getParent())
-            node.getParent().setRight(node.getLeft())
-        else:
-            node.getRight().setParent(node.getParent())
-            node.getParent().setRight(node.getRight())
-
-    def connect_to_left_of_parent(self, node):
-        if node.getLeft().getValue() is not None:
-            node.getLeft().setParent(node.getParent())
-            node.getParent().setLeft(node.getLeft())
-        else:
-            node.getRight().setParent(node.getParent())
-            node.getParent().setLeft(node.getRight())
+            node.getParent().setRight(node_to_connect)
 
     def delete_leaf(self, node):
         if node.getParent().getLeft() == node:
