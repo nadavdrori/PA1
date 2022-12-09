@@ -41,10 +41,10 @@ def given_balanced_tree_when_delete_two_sons_element_then_rotate():
     lst.insert(2, "c")
     lst.insert(2, "d")
     lst.insert(4, "e")
-    lst.delete(2)
+    lst.delete(3)
     print(lst.getRoot().getValue()=="b")
-    print(lst.getRoot().getRight().getValue()=="d")
-    print(lst.getRoot().getRight().getRight().getValue() == "e")
+    print(lst.getRoot().getRight().getValue()=="e")
+    print(lst.getRoot().getRight().getLeft().getValue() == "d")
 
 
 

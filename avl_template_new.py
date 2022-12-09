@@ -348,25 +348,41 @@ class AVLTreeList(object):
             node.getParent().setLeft(node_to_connect)
         else:
             node.getParent().setRight(node_to_connect)
+        self.clear_fields_of_node(node)
 
     def delete_leaf(self, node):
         if node.getParent().getLeft() == node:
             node.getParent().setLeft(AVLNode(None, node.getParent()))
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
+        self.clear_fields_of_node(node)
+
+    def clear_fields_of_node(self, node):
+        node.setRight(None)
+        node.setLeft(None)
+        node.setRight(None)
 
     def delete_two_childs(self, node, i):
         successor = self.retrieve(i + 1)
-        self.delete(i+1)
+        self.delete(i + 1)
         self.successor_replacment(node, successor)
 
 
     def successor_replacment(self, node, successor):
-        if node.getParent().getLeft() == node:
-            node.getParent().setLeft(successor)
+        self.replacment(node, successor)
+        # self.replacment(successor, node)
+
+
+
+    def replacment(self, original_node, new_node):
+        if original_node.getParent().getLeft() == original_node:
+            original_node.getParent().setLeft(new_node)
         else:
-            node.getParent().setRight(successor)
-        successor.setParent(node.getParent())
+            original_node.getParent().setRight(new_node)
+        new_node.setParent(original_node.getParent())
+        new_node.setLeft(original_node.getLeft())
+        new_node.setRight(original_node.getRight())
+        self.update_height_and_size(new_node)
 
     """returns the value of the first item in the list
 
