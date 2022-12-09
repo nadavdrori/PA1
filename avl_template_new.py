@@ -158,7 +158,6 @@ class AVLTreeList(object):
     Constructor, you are allowed to add more fields.
 
     """
-
     def __init__(self):
         self.size = 0
         self.root = None
@@ -348,18 +347,18 @@ class AVLTreeList(object):
     def connect_to_right_of_parent(self, node):
         if node.getLeft().getValue() is not None:
             node.getLeft().setParent(node.getParent())
-            node.getParent().setRight(node.getLeft)
+            node.getParent().setRight(node.getLeft())
         else:
             node.getRight().setParent(node.getParent())
-            node.getParent().setRight(node.getLeft)
+            node.getParent().setRight(node.getRight())
 
     def connect_to_left_of_parent(self, node):
         if node.getLeft().getValue() is not None:
             node.getLeft().setParent(node.getParent())
-            node.getParent().setLeft(node.getLeft)
+            node.getParent().setLeft(node.getLeft())
         else:
             node.getRight().setParent(node.getParent())
-            node.getParent().setLeft(node.getLeft)
+            node.getParent().setLeft(node.getRight())
 
     def delete_leaf(self, node):
         if node.getParent().getLeft() == node:
