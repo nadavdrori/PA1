@@ -440,6 +440,7 @@ class AVLTreeList(object):
     """
 
     def concat(self, lst):
+        height = abs(self.getRoot().getHeight() - lst.getRoot().getHeight())
         return None
 
     """searches for a *value* in the list
@@ -459,7 +460,7 @@ class AVLTreeList(object):
     @returns: the root, None if the list is empty
     """
 
-    def getRoot(self):
+    def getRoot(self) -> AVLNode:
         return self.root
 
     def setRoot(self, new_root):
