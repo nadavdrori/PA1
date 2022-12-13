@@ -247,11 +247,20 @@ class AVLTreeList(object):
 
     def insertLast(self, val):
         curr_node = self.getRoot()
-        while curr_node.getRight().getValue() is not None:
-            curr_node = curr_node.getRight()
+        curr_node = self.get_max_node_in_sub_of(curr_node)
         curr_node.setRight(AVLNode(val))
         curr_node.getRight().setParent(curr_node)
         return curr_node.getRight()
+
+    def get_max_node_in_sub_of(self, curr_node):
+        while curr_node.getRight().getValue() is not None:
+            curr_node = curr_node.getRight()
+        return curr_node
+
+    def get_min_node_in_sub_of(self, curr_node):
+        while curr_node.getLeft().getValue() is not None:
+            curr_node = curr_node.getLeft()
+        return curr_node
 
     def rebalancing_tree(self, node):
         rebalancing_count = 0
@@ -332,12 +341,15 @@ class AVLTreeList(object):
 
     def delete(self, i):
         node = self.retrieve(i)
+        return self.delete_node(node)
+
+    def delete_node(self, node):
         if (not node.getLeft().isRealNode()) and (not node.getRight().isRealNode()):
             self.delete_leaf(node)
         elif (not node.getLeft().isRealNode()) or (not node.getRight().isRealNode()):
             self.delete_one_child(node)
         else:
-            node = self.delete_two_childs(node, i)
+            node = self.delete_two_childs(node)
         return self.rebalancing_tree(node)
 
     def delete_one_child(self, node):
@@ -357,13 +369,20 @@ class AVLTreeList(object):
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
 
-    def delete_two_childs(self, node, i):
-        successor = self.retrieve(i + 1)
+    def delete_two_childs(self, node):
+        successor = self.successor(node)
         successor_parent = successor.getParent()
-        self.delete(i + 1)
+        self.delete_node(successor)
         self.replacment(node, successor)
         return successor_parent
 
+    def successor(self, node):
+        if node.getRight().getValue() is not None:
+            return self.get_min_node_in_sub_of(node.getRight())
+        else:
+            while node.getParent() is not None and node == node.getParent().getRight():
+                node = node.getParent()
+            return node.getParent()
     def replacment(self, original_node, new_node):
         if self.getRoot() == original_node:
             self.setRoot(new_node)
@@ -450,7 +469,7 @@ class AVLTreeList(object):
         b = tall_tree
         c = b.getParent()
         a = low_tree
-        self.delete(b)
+        self.delete_node(b)
         d = c.getRight()
         #c.
 
