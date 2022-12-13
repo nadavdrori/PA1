@@ -34,7 +34,7 @@ def given_balanced_tree_when_delete_one_son_element_then_rotate():
     print(lst.getRoot().getValue()=="b")
     print(lst.getRoot().getRight().getValue()=="d")
 
-def given_balanced_tree_when_delete_two_sons_element_then_rotate():
+def given_balanced_tree_when_delete_two_sons_element_then_delete():
     lst = AVLTreeList()
     lst.insert(0, "a")
     lst.insert(1, "b")
@@ -47,11 +47,24 @@ def given_balanced_tree_when_delete_two_sons_element_then_rotate():
     print(lst.getRoot().getRight().getLeft().getValue() == "d")
 
 
+def given_balanced_tree_when_delete_two_sons_element_then_rotate():
+    lst = AVLTreeList()
+    lst.insert(0, "a")
+    lst.insert(0, "b")
+    lst.insert(2, "c")
+    lst.insert(0, "d")
+    lst.insert(2, "e")
+    lst.insert(4, "f")
+    lst.insert(6, "j")
+    lst.insert(5, "t")
+    lst.delete(3)
+    print(lst.getRoot().getValue()=="f")
+    print(lst.getRoot().getRight().getLeft().getValue()=="t")
 
 
-
-
-#given_balanced_tree_when_delete_element_then_rotate()
-#given_list_when_retrieve_element_then_return_element()
-#given_balanced_tree_when_insert_element_then_rotate()
+given_balanced_tree_when_delete_element_then_rotate()
+given_list_when_retrieve_element_then_return_element()
+given_balanced_tree_when_insert_element_then_rotate()
 given_balanced_tree_when_delete_two_sons_element_then_rotate()
+given_balanced_tree_when_delete_two_sons_element_then_delete()
+given_balanced_tree_when_delete_one_son_element_then_rotate()

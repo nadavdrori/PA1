@@ -158,6 +158,7 @@ class AVLTreeList(object):
     Constructor, you are allowed to add more fields.
 
     """
+
     def __init__(self):
         self.size = 0
         self.root = None
@@ -206,8 +207,8 @@ class AVLTreeList(object):
 
     def insert(self, i, val):
         if self.empty():
-            self.root = AVLNode(val)
-            inserted_node = self.root
+            self.setRoot(AVLNode(val))
+            inserted_node = self.getRoot()
         else:
             if i == self.length():
                 inserted_node = self.insertLast(val)
@@ -288,8 +289,8 @@ class AVLTreeList(object):
         left_child.getRight().setParent(left_child)
         self.update_height_and_size(node)
         self.update_height_and_size(left_child)
-        if self.root == node:
-            self.root = left_child
+        if self.getRoot() == node:
+            self.setRoot(left_child)
 
     def left_rotation(self, node):
         right_child = node.getRight()
@@ -305,8 +306,8 @@ class AVLTreeList(object):
         right_child.getLeft().setParent(right_child)
         self.update_height_and_size(node)
         self.update_height_and_size(right_child)
-        if self.root == node:
-            self.root = right_child
+        if self.getRoot() == node:
+            self.setRoot(right_child)
 
     def left_right_rotation(self, node):
         self.left_rotation(node.getLeft())
@@ -336,7 +337,8 @@ class AVLTreeList(object):
         elif (not node.getLeft().isRealNode()) or (not node.getRight().isRealNode()):
             self.delete_one_child(node)
         else:
-            self.delete_two_childs(node, i)
+            node = self.delete_two_childs(node, i)
+        return self.rebalancing_tree(node)
 
     def delete_one_child(self, node):
         if node.getLeft().getValue() is not None:
@@ -348,37 +350,28 @@ class AVLTreeList(object):
             node.getParent().setLeft(node_to_connect)
         else:
             node.getParent().setRight(node_to_connect)
-        self.clear_fields_of_node(node)
 
     def delete_leaf(self, node):
         if node.getParent().getLeft() == node:
             node.getParent().setLeft(AVLNode(None, node.getParent()))
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
-        self.clear_fields_of_node(node)
-
-    def clear_fields_of_node(self, node):
-        node.setRight(None)
-        node.setLeft(None)
-        node.setRight(None)
 
     def delete_two_childs(self, node, i):
         successor = self.retrieve(i + 1)
+        successor_parent = successor.getParent()
         self.delete(i + 1)
-        self.successor_replacment(node, successor)
-
-
-    def successor_replacment(self, node, successor):
         self.replacment(node, successor)
-        # self.replacment(successor, node)
-
-
+        return successor_parent
 
     def replacment(self, original_node, new_node):
-        if original_node.getParent().getLeft() == original_node:
-            original_node.getParent().setLeft(new_node)
+        if self.getRoot() == original_node:
+            self.setRoot(new_node)
         else:
-            original_node.getParent().setRight(new_node)
+            if original_node.getParent().getLeft() == original_node:
+                original_node.getParent().setLeft(new_node)
+            else:
+                original_node.getParent().setRight(new_node)
         new_node.setParent(original_node.getParent())
         new_node.setLeft(original_node.getLeft())
         new_node.setRight(original_node.getRight())
@@ -468,3 +461,6 @@ class AVLTreeList(object):
 
     def getRoot(self):
         return self.root
+
+    def setRoot(self, new_root):
+        self.root = new_root
