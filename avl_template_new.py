@@ -440,7 +440,25 @@ class AVLTreeList(object):
     """
 
     def concat(self, lst):
-        height = abs(self.getRoot().getHeight() - lst.getRoot().getHeight())
+        height = self.getRoot().getHeight() - lst.getRoot().getHeight()
+        if height >= 0:
+            tall_tree = self.getRoot()
+            low_tree = lst.getRoot()
+        height = abs(height)
+        while tall_tree.getHeight() > low_tree.getHeight():
+            tall_tree = tall_tree.getRight()
+        b = tall_tree
+        c = b.getParent()
+        a = low_tree
+        self.delete(b)
+        d = c.getRight()
+        #c.
+
+
+
+
+
+
         return None
 
     """searches for a *value* in the list
