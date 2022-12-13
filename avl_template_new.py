@@ -383,6 +383,7 @@ class AVLTreeList(object):
             while node.getParent() is not None and node == node.getParent().getRight():
                 node = node.getParent()
             return node.getParent()
+
     def replacment(self, original_node, new_node):
         if self.getRoot() == original_node:
             self.setRoot(new_node)
@@ -471,13 +472,7 @@ class AVLTreeList(object):
         a = low_tree
         self.delete_node(b)
         d = c.getRight()
-        #c.
-
-
-
-
-
-
+        # c.
 
         return None
 
