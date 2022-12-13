@@ -404,7 +404,9 @@ class AVLTreeList(object):
     """
 
     def first(self):
-        return None
+        if self.empty():
+            return None
+        return self.get_min_node_in_sub_of(self.getRoot())
 
     """returns the value of the last item in the list
 
@@ -413,7 +415,9 @@ class AVLTreeList(object):
     """
 
     def last(self):
-        return None
+        if self.empty():
+            return None
+        return self.get_max_node_in_sub_of(self.getRoot())
 
     """returns an array representing list 
 
