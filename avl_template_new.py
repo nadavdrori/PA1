@@ -468,17 +468,25 @@ class AVLTreeList(object):
         if height >= 0:
             tall_tree = self.getRoot()
             low_tree = lst.getRoot()
+            x = self.last()
+        else:
+            low_tree = self.getRoot()
+            x = lst.last()
+            tall_tree = lst.getRoot()
         height = abs(height)
         while tall_tree.getHeight() > low_tree.getHeight():
             tall_tree = tall_tree.getRight()
         b = tall_tree
         c = b.getParent()
         a = low_tree
-        self.delete_node(b)
-        d = c.getRight()
-        # c.
+        c.setRight(x)
+        x.setParent(c)
+        a.setParent(x)
+        b.setParent(x)
+        x.setRight(a)
+        x.setLeft(b)
 
-        return None
+        return height
 
     """searches for a *value* in the list
 
