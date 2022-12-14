@@ -6,6 +6,7 @@
 
 
 """A class represnting a node in an AVL tree"""
+import math
 
 
 class AVLNode(object):
@@ -444,7 +445,29 @@ class AVLTreeList(object):
     """
 
     def sort(self):
-        return None
+        sorted_tree= AVLTreeList()
+        lst = self.listToArray()
+        # TODO: check if can use sort of python or implement by myself
+        sorted_lst= lst.sort()
+        return sorted_tree.create_tree_from_sorted_lst(sorted_lst)
+
+    # TODO: write that complexity is O(n)
+    def create_tree_from_sorted_lst(self, sorted_lst: list):
+        self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst))
+
+    def create_tree_from_sorted_lst_rec(self, sorted_lst):
+        if len(sorted_lst) <= 1:
+            return AVLNode(sorted_lst[0])
+        else:
+            middle = len(sorted_lst) // 2
+            root_node = AVLNode(sorted_lst[middle])
+
+            root_node.setLeft(self.create_tree_from_sorted_lst_rec(sorted_lst[:middle]))
+            root_node.getLeft().setParent(root_node)
+
+            root_node.setRight(self.create_tree_from_sorted_lst_rec(sorted_lst[middle + 1:]))
+            root_node.getRight().setParent(root_node)
+            return root_node
 
     """permute the info values of the list 
 
