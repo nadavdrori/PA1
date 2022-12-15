@@ -186,6 +186,14 @@ class AVLTreeList(object):
     def retrieve(self, i):
         return self.select(self.getRoot(), i + 1)
 
+    """ return the node with rank of i in the tree
+    @type i: int
+    @pre: 0 <= i < self.length()
+    @param i: rank in the tree
+    @rtype: AVLNode
+    @returns: the current node in the tree
+    """
+
     def select(self, node, i):
         left_node_size = node.getLeft().getSize() + 1
         if left_node_size == i:
@@ -219,11 +227,11 @@ class AVLTreeList(object):
 
     """inserts val at middle position in the list
 
-            @type val: str
-            @param val: the value we inserts
-            @rtype: AVLNode
-            @returns: the inserted node
-            """
+    @type val: str
+    @param val: the value we inserts
+    @rtype: AVLNode
+    @returns: the inserted node
+    """
 
     def insert_in_middle(self, i, val):
         curr_node = self.retrieve(i)
@@ -252,27 +260,53 @@ class AVLTreeList(object):
         curr_node.getRight().setParent(curr_node)
         return curr_node.getRight()
 
+    """ return the max node in the sub tree
+        @type node: AVLNode
+        @param curr_node: the node we start from
+        @rtype: AVLNode
+        @returns: the max node in the sub tree
+    """
+
     def get_max_node_in_sub_of(self, curr_node):
         while curr_node.getRight().getValue() is not None:
             curr_node = curr_node.getRight()
         return curr_node
+
+    """ return the min node in the sub tree
+            @type node: AVLNode
+            @param curr_node: the node we start from
+            @rtype: AVLNode
+            @returns: the min node in the sub tree
+    """
 
     def get_min_node_in_sub_of(self, curr_node):
         while curr_node.getLeft().getValue() is not None:
             curr_node = curr_node.getLeft()
         return curr_node
 
+    """ make the tree balanced and update the node's fields
+    @type node: AVLNode
+    @param node: the node we start from
+    @rtype: int
+    @returns: the number of rotations operations due to AVL rebalancing
+    """
+
     def rebalancing_tree(self, node):
-        rebalancing_count = 0
+        rotates_amount = 0
         while node is not None:
             self.update_height_and_size(node)
             if abs(node.getLeft().getHeight() - node.getRight().getHeight()) > 1:
-                rebalancing_count += 1
-                self.rebalance(node)
+                rotates_amount += 1
+                self.rotate(node)
             node = node.parent
-        return rebalancing_count
+        return rotates_amount
 
-    def rebalance(self, node):
+    """ make rotation on node
+    @type node: AVLNode
+    @param node: the node we operate on
+    """
+
+    def rotate(self, node):
         if node.getLeft().getHeight() > node.getRight().getHeight():
             if node.getLeft().getLeft().getHeight() > node.getLeft().getRight().getHeight():
                 self.right_rotation(node)
@@ -283,6 +317,11 @@ class AVLTreeList(object):
                 self.left_rotation(node)
             else:
                 self.right_left_rotation(node)
+
+    """ make right rotation on node
+    @type node: AVLNode
+    @param node: the node we operate on
+    """
 
     def right_rotation(self, node):
         left_child = node.getLeft()
@@ -301,6 +340,11 @@ class AVLTreeList(object):
         if self.getRoot() == node:
             self.setRoot(left_child)
 
+    """ make left rotation on node
+        @type node: AVLNode
+        @param node: the node we operate on
+        """
+
     def left_rotation(self, node):
         right_child = node.getRight()
         right_child.setParent(node.getParent())
@@ -318,13 +362,28 @@ class AVLTreeList(object):
         if self.getRoot() == node:
             self.setRoot(right_child)
 
+    """ make left right rotation on node
+        @type node: AVLNode
+        @param node: the node we operate on
+    """
+
     def left_right_rotation(self, node):
         self.left_rotation(node.getLeft())
         self.right_rotation(node)
 
+    """ make right left rotation on node
+        @type node: AVLNode
+        @param node: the node we operate on
+    """
+
     def right_left_rotation(self, node):
         self.right_rotation(node.getRight())
         self.left_rotation(node)
+
+    """ update the height and size of the node
+        @type node: AVLNode
+        @param node: the node we operate on
+    """
 
     def update_height_and_size(self, node):
         node.setHeight(max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1)
@@ -343,16 +402,28 @@ class AVLTreeList(object):
         node = self.retrieve(i)
         return self.delete_node(node)
 
+    """deletes the node in the list
+    @type node: AVLNode
+    @param node: The intended node in the list to be deleted
+    @rtype: int
+    @returns: the number of rebalancing operation due to AVL rebalancing
+    """
+
     def delete_node(self, node):
         if (not node.getLeft().isRealNode()) and (not node.getRight().isRealNode()):
             self.delete_leaf(node)
         elif (not node.getLeft().isRealNode()) or (not node.getRight().isRealNode()):
-            self.delete_one_child(node)
+            self.delete_node_with_single_son(node)
         else:
-            node = self.delete_two_childs(node)
+            node = self.delete_node_with_two_sons(node)
         return self.rebalancing_tree(node)
 
-    def delete_one_child(self, node):
+    """deletes node which have single son
+        @type node: AVLNode
+        @param node: The intended node in the list to be deleted with single son
+    """
+
+    def delete_node_with_single_son(self, node):
         if node.getLeft().getValue() is not None:
             node_to_connect = node.getLeft()
         else:
@@ -369,13 +440,25 @@ class AVLTreeList(object):
         else:
             node.getParent().setRight(AVLNode(None, node.getParent()))
 
-    def delete_two_childs(self, node):
+    """deletes node which have two sons
+        @type node: AVLNode
+        @param node: The intended node in the list to be deleted with two sons
+        @rtype: AVLNode
+        @returns: the node which is the parent of the actual deleted node
+    """
+    def delete_node_with_two_sons(self, node):
         successor = self.successor(node)
         successor_parent = successor.getParent()
         self.delete_node(successor)
         self.replacment(node, successor)
         return successor_parent
 
+    """ get the successor of the node
+        @type node: AVLNode
+        @param node: The intended node in the list to get its successor
+        @rtype: AVLNode
+        @returns: the successor of the node
+    """
     def successor(self, node):
         if node.getRight().getValue() is not None:
             return self.get_min_node_in_sub_of(node.getRight())
@@ -384,6 +467,12 @@ class AVLTreeList(object):
                 node = node.getParent()
             return node.getParent()
 
+    """ replace between two nodes
+        @type original_node: AVLNode
+        @param original_node: The intended node in the list to be replaced
+        @type new_node: AVLNode
+        @param new_node: The intended node in the list to replace
+    """
     def replacment(self, original_node, new_node):
         if self.getRoot() == original_node:
             self.setRoot(new_node)
@@ -429,6 +518,16 @@ class AVLTreeList(object):
         lst = []
         return self.listToArray_rec(self.getRoot(), lst)
 
+    """insert the tree nodes to the given list
+
+    @type lst: list
+    @param lst: the list to insert the tree nodes to
+    @type node: AVLNode
+    @param node: the current node to insert to the list
+    @rtype: list
+    @returns: the list of strings representing the data structure
+        """
+
     def listToArray_rec(self, node, lst):
         if not node.isRealNode():
             return lst
@@ -459,6 +558,16 @@ class AVLTreeList(object):
         sorted_tree.create_tree_from_sorted_lst(lst)
         return sorted_tree
 
+    """sort the given list
+        
+    @type lst: list
+    @param lst: the list to sort
+    @type start: int
+    @param start: the start index of the list
+    @type end: int
+    @param end: the end index of the list
+    """
+
     def mergeSort(self, lst, left_index, right_index):
         if left_index < right_index:
             middle_index = left_index + (right_index - left_index) // 2
@@ -467,6 +576,17 @@ class AVLTreeList(object):
             self.mergeSort(lst, left_index, middle_index)
             self.mergeSort(lst, middle_index + 1, right_index)
             self.merge(lst, left_index, middle_index, right_index)
+
+    """merge the two sorted lists
+    @type lst: list
+    @param lst: the list to sort
+    @type left_index: int
+    @param left_index: the start index of the list
+    @type middle_index: int
+    @param middle_index: the middle index of the list
+    @type right_index: int
+    @param right_index: the end index of the list
+    """
 
     def merge(self, lst, left_index, middle_index, right_index):
         n1 = middle_index - left_index + 1
@@ -511,7 +631,10 @@ class AVLTreeList(object):
             j += 1
             k += 1
 
-        # TODO: write that complexity is O(n)
+    """create a tree from a sorted list    
+    @type lst: list
+    @param lst: the list to create the tree from
+    """
 
     def create_tree_from_sorted_lst(self, sorted_lst: list):
         self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst))
