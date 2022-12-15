@@ -455,11 +455,11 @@ class AVLTreeList(object):
     def sort(self):
         sorted_tree = AVLTreeList()
         lst = self.listToArray()
-        # TODO: check if can use sort of python or implement by myself
-        sorted_lst = lst.sort()
-        return sorted_tree.create_tree_from_sorted_lst(sorted_lst)
+        lst.sort()
+        sorted_tree.create_tree_from_sorted_lst(lst)
+        return sorted_tree
 
-    # TODO: write that complexity is O(n)
+        # TODO: write that complexity is O(n)
     def create_tree_from_sorted_lst(self, sorted_lst: list):
         self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst))
 
