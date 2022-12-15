@@ -6,7 +6,6 @@
 
 
 """A class represnting a node in an AVL tree"""
-import math
 
 
 class AVLNode(object):
@@ -427,7 +426,16 @@ class AVLTreeList(object):
     """
 
     def listToArray(self):
-        return None
+        lst = []
+        return self.listToArray_rec(self.getRoot(), lst)
+
+    def listToArray_rec(self, node, lst):
+        if not node.isRealNode():
+            return lst
+        self.listToArray_rec(node.getLeft(), lst)
+        lst.append(node.getValue())
+        self.listToArray_rec(node.getRight(), lst)
+        return lst
 
     """returns the size of the list 
 
@@ -445,10 +453,10 @@ class AVLTreeList(object):
     """
 
     def sort(self):
-        sorted_tree= AVLTreeList()
+        sorted_tree = AVLTreeList()
         lst = self.listToArray()
         # TODO: check if can use sort of python or implement by myself
-        sorted_lst= lst.sort()
+        sorted_lst = lst.sort()
         return sorted_tree.create_tree_from_sorted_lst(sorted_lst)
 
     # TODO: write that complexity is O(n)

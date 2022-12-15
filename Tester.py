@@ -106,6 +106,29 @@ def given_sorted_lst_when_create_tree_then_get_valid_tree():
     print((tree.getRoot().getValue() == 4))
 
 
+def given_tree_when_convert_to_list_then_get_valid_list():
+    lst = AVLTreeList()
+    org_lst=[]
+    lst.insert(0, "a")
+    lst.insert(0, "b")
+    lst.insert(2, "c")
+    lst.insert(0, "d")
+    lst.insert(2, "e")
+    lst.insert(4, "f")
+    lst.insert(6, "j")
+    lst.insert(5, "t")
+
+    org_lst.insert(0, "a")
+    org_lst.insert(0, "b")
+    org_lst.insert(2, "c")
+    org_lst.insert(0, "d")
+    org_lst.insert(2, "e")
+    org_lst.insert(4, "f")
+    org_lst.insert(6, "j")
+    org_lst.insert(5, "t")
+    print(lst.listToArray() == org_lst)
+
+
 # given_balanced_tree_when_delete_element_then_rotate()
 # given_list_when_retrieve_element_then_return_element()
 # given_balanced_tree_when_insert_element_then_rotate()
@@ -115,4 +138,5 @@ def given_sorted_lst_when_create_tree_then_get_valid_tree():
 #
 # given_balanced_tree_when_get_first_then_return_right_value()
 # given_balanced_tree_when_get_last_then_return_right_value()
-given_sorted_lst_when_create_tree_then_get_valid_tree()
+# given_sorted_lst_when_create_tree_then_get_valid_tree()
+given_tree_when_convert_to_list_then_get_valid_list()
