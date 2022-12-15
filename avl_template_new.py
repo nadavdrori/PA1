@@ -455,11 +455,64 @@ class AVLTreeList(object):
     def sort(self):
         sorted_tree = AVLTreeList()
         lst = self.listToArray()
-        lst.sort()
+        self.mergeSort(lst, 0, len(lst) - 1)
         sorted_tree.create_tree_from_sorted_lst(lst)
         return sorted_tree
 
+    def mergeSort(self, lst, left_index, right_index):
+        if left_index < right_index:
+            middle_index = left_index + (right_index - left_index) // 2
+
+            # Sort first and second halves
+            self.mergeSort(lst, left_index, middle_index)
+            self.mergeSort(lst, middle_index + 1, right_index)
+            self.merge(lst, left_index, middle_index, right_index)
+
+    def merge(self, lst, left_index, middle_index, right_index):
+        n1 = middle_index - left_index + 1
+        n2 = right_index - middle_index
+
+        # create temp arrays
+        left_lst = [0] * (n1)
+        right_lst = [0] * (n2)
+
+        # Copy data to temp arrays left_lst[] and right_lst[]
+        for i in range(0, n1):
+            left_lst[i] = lst[left_index + i]
+
+        for j in range(0, n2):
+            right_lst[j] = lst[middle_index + 1 + j]
+
+        # Merge the temp arrays back into lst[left_index..right_index]
+        i = 0  # Initial index of first subarray
+        j = 0  # Initial index of second subarray
+        k = left_index  # Initial index of merged subarray
+
+        while i < n1 and j < n2:
+            if left_lst[i] <= right_lst[j]:
+                lst[k] = left_lst[i]
+                i += 1
+            else:
+                lst[k] = right_lst[j]
+                j += 1
+            k += 1
+
+        # Copy the remaining elements of left_lst[], if there
+        # are any
+        while i < n1:
+            lst[k] = left_lst[i]
+            i += 1
+            k += 1
+
+        # Copy the remaining elements of right_lst[], if there
+        # are any
+        while j < n2:
+            lst[k] = right_lst[j]
+            j += 1
+            k += 1
+
         # TODO: write that complexity is O(n)
+
     def create_tree_from_sorted_lst(self, sorted_lst: list):
         self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst))
 
