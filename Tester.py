@@ -150,7 +150,12 @@ def given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amou
     lst.insert(0, "b")
     print(lst.insert(0, "c") == 1)
 
-
+def test_shuffle():
+    lst = AVLTreeList()
+    lst.insert(0, "a")
+    lst.insert(0, "b")
+    lst.insert(2, "c")
+    print(lst.permutation().getRoot().getValue())
 #
 # given_balanced_tree_when_delete_element_then_rotate()
 # given_list_when_retrieve_element_then_return_element()
@@ -164,4 +169,5 @@ def given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amou
 # given_sorted_lst_when_create_tree_then_get_valid_tree()
 # given_tree_when_convert_to_list_then_get_valid_list()
 # given_tree_when_sort_then_get_sorted_tree()
-given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amount()
+# given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amount()
+test_shuffle()
