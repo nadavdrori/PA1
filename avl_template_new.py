@@ -159,12 +159,18 @@ class AVLTreeList(object):
 
     """
 
+
     def __init__(self):
         self.size = 0
         self.root = None
 
     # add your fields here
 
+    def setSize(self, size):
+        self.size = size
+
+    def getSize(self):
+        return self.size
     """returns whether the list is empty
 
     @rtype: bool
@@ -416,6 +422,7 @@ class AVLTreeList(object):
             self.delete_node_with_single_son(node)
         else:
             node = self.delete_node_with_two_sons(node)
+        self.size -= 1
         return self.rebalancing_tree(node)
 
     """deletes node which have single son
@@ -677,36 +684,55 @@ class AVLTreeList(object):
             low_tree_root = lst.getRoot()
             x = self.last()
             self.delete_node(x)
-            while tall_tree_connect_node.getHeight() > low_tree_root.getHeight():
-                tall_tree_connect_node = tall_tree_connect_node.getRight()
-            b = tall_tree_connect_node
-            c = b.getParent()
-            a = low_tree_root
-            c.setRight(x)
-            x.setParent(c)
-            x.setLeft(b)
-            x.setRight(a)
-            a.setParent(x)
-            b.setParent(x)
-            self.rebalancing_tree(x)
+            x.setParent(None)
+            self.update_big(low_tree_root, tall_tree_connect_node, x)
         else:
             low_tree_root = self.getRoot()
             tall_tree_connect_node = lst.getRoot()
-            while tall_tree_connect_node.getHeight() > low_tree_root.getHeight():
-                tall_tree_connect_node = tall_tree_connect_node.getLeft()
             x = self.last()
             self.delete_node(x)
-            a = low_tree_root
-            b = tall_tree_connect_node
-            c = b.getParent()
-            a.setParent(x)
-            x.setLeft(a)
-            x.setRight(b)
-            b.setParent(x)
-            c.setLeft(x)
-            self.rebalancing_tree(x)
+            x.setParent(None)
+            self.update_small(low_tree_root, tall_tree_connect_node, x)
+        self.update_root(x)
+        self.setSize(self.getRoot().getSize())
         height = abs(height)
         return height
+
+    def update_big(self, low_tree_root, tall_tree_connect_node, x):
+        while tall_tree_connect_node.getHeight() > low_tree_root.getHeight() and tall_tree_connect_node.getRight().isRealNode():
+            tall_tree_connect_node = tall_tree_connect_node.getRight()
+        b = tall_tree_connect_node
+        a = low_tree_root
+        x.setLeft(b)
+        x.setRight(a)
+        if (b.getParent() != None):
+            x.setParent(b.getParent())
+            b.getParent().setRight(x)
+        else:
+            self.setRoot(x)
+            self.getRoot().setSize(self.getSize())
+        a.setParent(x)
+        b.setParent(x)
+        self.rebalancing_tree(x)
+
+    def update_small(self, low_tree_root, tall_tree_connect_node, x):
+        while tall_tree_connect_node.getHeight() > low_tree_root.getHeight() and tall_tree_connect_node.getLeft().isRealNode():
+            tall_tree_connect_node = tall_tree_connect_node.getLeft()
+        a = low_tree_root
+        b = tall_tree_connect_node
+        c = b.getParent()
+        a.setParent(x)
+        x.setLeft(a)
+        x.setRight(b)
+        b.setParent(x)
+        c.setLeft(x)
+        x.setParent(c)
+        self.rebalancing_tree(x)
+
+    def update_root(self, x):
+        while (x.getParent() != None):
+            x = x.getParent()
+        self.setRoot(x)
 
     """searches for a *value* in the list
 
