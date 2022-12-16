@@ -673,26 +673,39 @@ class AVLTreeList(object):
     def concat(self, lst):
         height = self.getRoot().getHeight() - lst.getRoot().getHeight()
         if height >= 0:
-            tall_tree = self.getRoot()
-            low_tree = lst.getRoot()
+            tall_tree_connect_node = self.getRoot()
+            low_tree_root = lst.getRoot()
             x = self.last()
+            self.delete_node(x)
+            while tall_tree_connect_node.getHeight() > low_tree_root.getHeight():
+                tall_tree_connect_node = tall_tree_connect_node.getRight()
+            b = tall_tree_connect_node
+            c = b.getParent()
+            a = low_tree_root
+            c.setRight(x)
+            x.setParent(c)
+            x.setLeft(b)
+            x.setRight(a)
+            a.setParent(x)
+            b.setParent(x)
+            self.rebalancing_tree(x)
         else:
-            low_tree = self.getRoot()
-            x = lst.last()
-            tall_tree = lst.getRoot()
+            low_tree_root = self.getRoot()
+            tall_tree_connect_node = lst.getRoot()
+            while tall_tree_connect_node.getHeight() > low_tree_root.getHeight():
+                tall_tree_connect_node = tall_tree_connect_node.getLeft()
+            x = self.last()
+            self.delete_node(x)
+            a = low_tree_root
+            b = tall_tree_connect_node
+            c = b.getParent()
+            a.setParent(x)
+            x.setLeft(a)
+            x.setRight(b)
+            b.setParent(x)
+            c.setLeft(x)
+            self.rebalancing_tree(x)
         height = abs(height)
-        while tall_tree.getHeight() > low_tree.getHeight():
-            tall_tree = tall_tree.getRight()
-        b = tall_tree
-        c = b.getParent()
-        a = low_tree
-        c.setRight(x)
-        x.setParent(c)
-        a.setParent(x)
-        b.setParent(x)
-        x.setRight(a)
-        x.setLeft(b)
-
         return height
 
     """searches for a *value* in the list
