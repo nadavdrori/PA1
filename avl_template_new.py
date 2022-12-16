@@ -296,8 +296,7 @@ class AVLTreeList(object):
         while node is not None:
             self.update_height_and_size(node)
             if abs(node.getLeft().getHeight() - node.getRight().getHeight()) > 1:
-                rotates_amount += 1
-                self.rotate(node)
+                rotates_amount += self.rotate(node)
             node = node.parent
         return rotates_amount
 
@@ -309,14 +308,14 @@ class AVLTreeList(object):
     def rotate(self, node):
         if node.getLeft().getHeight() > node.getRight().getHeight():
             if node.getLeft().getLeft().getHeight() > node.getLeft().getRight().getHeight():
-                self.right_rotation(node)
+                return self.right_rotation(node)
             else:
-                self.left_right_rotation(node)
+                return self.left_right_rotation(node)
         else:
             if node.getRight().getRight().getHeight() > node.getRight().getLeft().getHeight():
-                self.left_rotation(node)
+                return self.left_rotation(node)
             else:
-                self.right_left_rotation(node)
+                return self.right_left_rotation(node)
 
     """ make right rotation on node
     @type node: AVLNode
@@ -339,6 +338,7 @@ class AVLTreeList(object):
         self.update_height_and_size(left_child)
         if self.getRoot() == node:
             self.setRoot(left_child)
+        return 1
 
     """ make left rotation on node
         @type node: AVLNode
@@ -361,6 +361,7 @@ class AVLTreeList(object):
         self.update_height_and_size(right_child)
         if self.getRoot() == node:
             self.setRoot(right_child)
+        return 1
 
     """ make left right rotation on node
         @type node: AVLNode
@@ -368,8 +369,7 @@ class AVLTreeList(object):
     """
 
     def left_right_rotation(self, node):
-        self.left_rotation(node.getLeft())
-        self.right_rotation(node)
+        return self.left_rotation(node.getLeft()) + self.right_rotation(node)
 
     """ make right left rotation on node
         @type node: AVLNode
@@ -377,8 +377,7 @@ class AVLTreeList(object):
     """
 
     def right_left_rotation(self, node):
-        self.right_rotation(node.getRight())
-        self.left_rotation(node)
+        return self.right_rotation(node.getRight()) + self.left_rotation(node)
 
     """ update the height and size of the node
         @type node: AVLNode
@@ -446,6 +445,7 @@ class AVLTreeList(object):
         @rtype: AVLNode
         @returns: the node which is the parent of the actual deleted node
     """
+
     def delete_node_with_two_sons(self, node):
         successor = self.successor(node)
         successor_parent = successor.getParent()
@@ -459,6 +459,7 @@ class AVLTreeList(object):
         @rtype: AVLNode
         @returns: the successor of the node
     """
+
     def successor(self, node):
         if node.getRight().getValue() is not None:
             return self.get_min_node_in_sub_of(node.getRight())
@@ -473,6 +474,7 @@ class AVLTreeList(object):
         @type new_node: AVLNode
         @param new_node: The intended node in the list to replace
     """
+
     def replacment(self, original_node, new_node):
         if self.getRoot() == original_node:
             self.setRoot(new_node)
