@@ -730,7 +730,7 @@ class AVLTreeList(object):
         self.rebalancing_tree(x)
 
     def update_root(self, x):
-        while (x.getParent() != None):
+        while x.getParent() is not None:
             x = x.getParent()
         self.setRoot(x)
 
@@ -743,7 +743,15 @@ class AVLTreeList(object):
     """
 
     def search(self, val):
-        return None
+        if self.getSize() == 0:
+            return -1
+        lst = self.listToArray()
+        for i in range(len(lst)):
+            if val == lst[i]:
+                return i
+        return -1
+
+
 
     """returns the root of the tree representing the list
 

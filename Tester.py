@@ -138,6 +138,7 @@ def given_tree_when_convert_to_list_then_get_valid_list():
     org_lst.insert(5, "t")
     print(lst.listToArray() == org_lst)
 
+
 def test_concat():
     lst1 = AVLTreeList()
     lst2 = AVLTreeList()
@@ -153,7 +154,6 @@ def test_concat():
     lst1.insert(3, "i")
     lst1.insert(3, "o")
 
-
     lst2.insert(0, "z")
     lst2.insert(0, "w")
     lst2.insert(2, "n")
@@ -163,6 +163,17 @@ def test_concat():
     lst2.insert(6, "s")
 
     return lst1.concat(lst2)
+
+def search_test():
+    lst1 = AVLTreeList()
+    print(lst1.search("a"))
+    print(lst1.search("h"))
+    print(lst1.search("k"))
+    print(lst1.search("l"))
+    print(lst1.search("j"))
+    print(lst1.search("o"))
+    print(lst1.search('a'))
+
 
 # given_balanced_tree_when_delete_element_then_rotate()
 # given_list_when_retrieve_element_then_return_element()
@@ -175,5 +186,7 @@ def test_concat():
 # given_balanced_tree_when_get_last_then_return_right_value()
 # given_sorted_lst_when_create_tree_then_get_valid_tree()
 # given_tree_when_convert_to_list_then_get_valid_list()
-#given_tree_when_sort_then_get_sorted_tree()
-print(test_concat())
+# given_tree_when_sort_then_get_sorted_tree()
+# print(test_concat())
+search_test()
+
