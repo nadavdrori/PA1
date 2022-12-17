@@ -187,6 +187,6 @@ def search_test():
 # given_sorted_lst_when_create_tree_then_get_valid_tree()
 # given_tree_when_convert_to_list_then_get_valid_list()
 # given_tree_when_sort_then_get_sorted_tree()
-# print(test_concat())
-search_test()
+print(test_concat())
+# search_test()
 
