@@ -6,6 +6,7 @@
 
 
 """A class represnting a node in an AVL tree"""
+from random import randint
 
 
 class AVLNode(object):
@@ -302,8 +303,7 @@ class AVLTreeList(object):
         while node is not None:
             self.update_height_and_size(node)
             if abs(node.getLeft().getHeight() - node.getRight().getHeight()) > 1:
-                rotates_amount += 1
-                self.rotate(node)
+                rotates_amount += self.rotate(node)
             node = node.parent
         return rotates_amount
 
@@ -315,14 +315,14 @@ class AVLTreeList(object):
     def rotate(self, node):
         if node.getLeft().getHeight() > node.getRight().getHeight():
             if node.getLeft().getLeft().getHeight() > node.getLeft().getRight().getHeight():
-                self.right_rotation(node)
+                return self.right_rotation(node)
             else:
-                self.left_right_rotation(node)
+                return self.left_right_rotation(node)
         else:
             if node.getRight().getRight().getHeight() > node.getRight().getLeft().getHeight():
-                self.left_rotation(node)
+                return self.left_rotation(node)
             else:
-                self.right_left_rotation(node)
+                return self.right_left_rotation(node)
 
     """ make right rotation on node
     @type node: AVLNode
@@ -345,6 +345,7 @@ class AVLTreeList(object):
         self.update_height_and_size(left_child)
         if self.getRoot() == node:
             self.setRoot(left_child)
+        return 1
 
     """ make left rotation on node
         @type node: AVLNode
@@ -367,6 +368,7 @@ class AVLTreeList(object):
         self.update_height_and_size(right_child)
         if self.getRoot() == node:
             self.setRoot(right_child)
+        return 1
 
     """ make left right rotation on node
         @type node: AVLNode
@@ -374,8 +376,7 @@ class AVLTreeList(object):
     """
 
     def left_right_rotation(self, node):
-        self.left_rotation(node.getLeft())
-        self.right_rotation(node)
+        return self.left_rotation(node.getLeft()) + self.right_rotation(node)
 
     """ make right left rotation on node
         @type node: AVLNode
@@ -383,8 +384,7 @@ class AVLTreeList(object):
     """
 
     def right_left_rotation(self, node):
-        self.right_rotation(node.getRight())
-        self.left_rotation(node)
+        return self.right_rotation(node.getRight()) + self.left_rotation(node)
 
     """ update the height and size of the node
         @type node: AVLNode
@@ -453,6 +453,7 @@ class AVLTreeList(object):
         @rtype: AVLNode
         @returns: the node which is the parent of the actual deleted node
     """
+
     def delete_node_with_two_sons(self, node):
         successor = self.successor(node)
         successor_parent = successor.getParent()
@@ -466,6 +467,7 @@ class AVLTreeList(object):
         @rtype: AVLNode
         @returns: the successor of the node
     """
+
     def successor(self, node):
         if node.getRight().getValue() is not None:
             return self.get_min_node_in_sub_of(node.getRight())
@@ -480,6 +482,7 @@ class AVLTreeList(object):
         @type new_node: AVLNode
         @param new_node: The intended node in the list to replace
     """
+
     def replacment(self, original_node, new_node):
         if self.getRoot() == original_node:
             self.setRoot(new_node)
@@ -667,7 +670,25 @@ class AVLTreeList(object):
     """
 
     def permutation(self):
-        return None
+        shuffled_tree = AVLTreeList()
+        lst = self.listToArray()
+        self.shuffle_list(lst)
+        shuffled_tree.create_tree_from_sorted_lst(lst)
+        return shuffled_tree
+
+    """shuffle the given list
+    @type lst: list
+    @param lst: the list to shuffle
+    """
+
+    def shuffle_list(self, lst):
+        # Start from the last element and swap one by one. We don't
+        lst_size = len(lst)
+        for index in range(lst_size - 1, 0, -1):
+            index_to_replace = randint(0, index)
+            lst[index], lst[index_to_replace] = lst[index_to_replace], lst[index]
+
+        return lst
 
     """concatenates lst to self
 
