@@ -160,10 +160,11 @@ class AVLTreeList(object):
 
     """
 
-
     def __init__(self):
         self.size = 0
         self.root = None
+        self.first = None
+        self.last = None
 
     # add your fields here
 
@@ -172,6 +173,7 @@ class AVLTreeList(object):
 
     def getSize(self):
         return self.size
+
     """returns whether the list is empty
 
     @rtype: bool
@@ -224,9 +226,12 @@ class AVLTreeList(object):
         if self.empty():
             self.setRoot(AVLNode(val))
             inserted_node = self.getRoot()
+            self.last = inserted_node
+            self.first = inserted_node
         else:
             if i == self.length():
                 inserted_node = self.insertLast(val)
+                self.last = inserted_node
             elif i < self.length():
                 inserted_node = self.insert_in_middle(i, val)
         self.size += 1
@@ -241,6 +246,7 @@ class AVLTreeList(object):
     """
 
     def insert_in_middle(self, i, val):
+        # TODO: Check last and oupdate
         curr_node = self.retrieve(i)
         if curr_node.getLeft().getValue() is None:
             curr_node.setLeft(AVLNode(val))
@@ -275,6 +281,8 @@ class AVLTreeList(object):
     """
 
     def get_max_node_in_sub_of(self, curr_node):
+        if self.empty():
+            return None
         while curr_node.getRight().getValue() is not None:
             curr_node = curr_node.getRight()
         return curr_node
@@ -287,6 +295,8 @@ class AVLTreeList(object):
     """
 
     def get_min_node_in_sub_of(self, curr_node):
+        if self.empty():
+            return None
         while curr_node.getLeft().getValue() is not None:
             curr_node = curr_node.getLeft()
         return curr_node
@@ -423,7 +433,10 @@ class AVLTreeList(object):
         else:
             node = self.delete_node_with_two_sons(node)
         self.size -= 1
-        return self.rebalancing_tree(node)
+        rotations_count = self.rebalancing_tree(node)
+        self.first = self.get_min_node_in_sub_of(self.getRoot())
+        self.last = self.get_max_node_in_sub_of(self.getRoot())
+        return rotations_count
 
     """deletes node which have single son
         @type node: AVLNode
@@ -505,7 +518,7 @@ class AVLTreeList(object):
     def first(self):
         if self.empty():
             return None
-        return self.get_min_node_in_sub_of(self.getRoot())
+        return self.first.getValue()
 
     """returns the value of the last item in the list
 
@@ -516,7 +529,7 @@ class AVLTreeList(object):
     def last(self):
         if self.empty():
             return None
-        return self.get_max_node_in_sub_of(self.getRoot())
+        return self.last.getValue()
 
     """returns an array representing list 
 
@@ -699,6 +712,7 @@ class AVLTreeList(object):
     """
 
     def concat(self, lst):
+        self.last = lst.last
         height = self.getRoot().getHeight() - lst.getRoot().getHeight()
         if height >= 0:
             tall_tree_connect_node = self.getRoot()
@@ -771,8 +785,6 @@ class AVLTreeList(object):
             if val == lst[i]:
                 return i
         return -1
-
-
 
     """returns the root of the tree representing the list
 
