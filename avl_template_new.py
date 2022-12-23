@@ -662,19 +662,19 @@ class AVLTreeList(object):
     """
 
     def create_tree_from_sorted_lst(self, sorted_lst: list):
-        self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst))
+        self.setRoot(self.create_tree_from_sorted_lst_rec(sorted_lst, 0, len(sorted_lst) - 1))
 
-    def create_tree_from_sorted_lst_rec(self, sorted_lst):
-        if len(sorted_lst) <= 1:
-            return AVLNode(sorted_lst[0])
+    def create_tree_from_sorted_lst_rec(self, sorted_lst, first, last):
+        if last == first:
+            return AVLNode(sorted_lst[first])
         else:
-            middle = len(sorted_lst) // 2
+            middle = (last + first) // 2
             root_node = AVLNode(sorted_lst[middle])
 
-            root_node.setLeft(self.create_tree_from_sorted_lst_rec(sorted_lst[:middle]))
+            root_node.setLeft(self.create_tree_from_sorted_lst_rec(sorted_lst, first, middle))
             root_node.getLeft().setParent(root_node)
 
-            root_node.setRight(self.create_tree_from_sorted_lst_rec(sorted_lst[middle + 1:]))
+            root_node.setRight(self.create_tree_from_sorted_lst_rec(sorted_lst, middle + 1, last))
             root_node.getRight().setParent(root_node)
             return root_node
 
