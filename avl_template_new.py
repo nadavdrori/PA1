@@ -253,7 +253,7 @@ class AVLTreeList(object):
             curr_node.getLeft().setParent(curr_node)
             return curr_node.getLeft()
         else:
-            pred = self.retrieve(i - 1)  # TODO - compare complexity retrieve\predecessor function
+            pred = self.retrieve(i - 1)
             pred.setRight(AVLNode(val))
             pred.getRight().setParent(pred)
             return pred.getRight()
@@ -720,27 +720,36 @@ class AVLTreeList(object):
             x = self.last()
             self.delete_node(x)
             x.setParent(None)
-            self.update_big(low_tree_root, tall_tree_connect_node, x)
+            self.update_big_tree(low_tree_root, tall_tree_connect_node, x)
         else:
             low_tree_root = self.getRoot()
             tall_tree_connect_node = lst.getRoot()
             x = self.last()
             self.delete_node(x)
             x.setParent(None)
-            self.update_small(low_tree_root, tall_tree_connect_node, x)
+            self.update_small_tree(low_tree_root, tall_tree_connect_node, x)
         self.update_root(x)
         self.setSize(self.getRoot().getSize())
         height = abs(height)
         return height
 
-    def update_big(self, low_tree_root, tall_tree_connect_node, x):
-        while tall_tree_connect_node.getHeight() > low_tree_root.getHeight() and tall_tree_connect_node.getRight().isRealNode():
-            tall_tree_connect_node = tall_tree_connect_node.getRight()
-        b = tall_tree_connect_node
-        a = low_tree_root
+    """ update pointer while concat in case of big tree
+    @type lower_tree_root: AVLNode
+    @param lower_tree_root: the root of the lower tree
+    @type taller_tree_connect_node: AVLNode
+    @param taller_tree_connect_node: the root of the taller tree
+    @type x: AVLNode
+    @param x: the node to connect between the trees
+    """
+
+    def update_big_tree(self, lower_tree_root, taller_tree_connect_node, x):
+        while taller_tree_connect_node.getHeight() > lower_tree_root.getHeight() and taller_tree_connect_node.getRight().isRealNode():
+            taller_tree_connect_node = taller_tree_connect_node.getRight()
+        b = taller_tree_connect_node
+        a = lower_tree_root
         x.setLeft(b)
         x.setRight(a)
-        if (b.getParent() != None):
+        if b.getParent() != None:
             x.setParent(b.getParent())
             b.getParent().setRight(x)
         else:
@@ -750,7 +759,16 @@ class AVLTreeList(object):
         b.setParent(x)
         self.rebalancing_tree(x)
 
-    def update_small(self, low_tree_root, tall_tree_connect_node, x):
+    """ update pointer while concat in case of small tree
+    @type lower_tree_root: AVLNode
+    @param lower_tree_root: the root of the lower tree
+    @type taller_tree_connect_node: AVLNode
+    @param taller_tree_connect_node: the root of the taller tree
+    @type x: AVLNode
+    @param x: the node to connect between the trees
+    """
+
+    def update_small_tree(self, low_tree_root, tall_tree_connect_node, x):
         while tall_tree_connect_node.getHeight() > low_tree_root.getHeight() and tall_tree_connect_node.getLeft().isRealNode():
             tall_tree_connect_node = tall_tree_connect_node.getLeft()
         a = low_tree_root
@@ -764,10 +782,15 @@ class AVLTreeList(object):
         x.setParent(c)
         self.rebalancing_tree(x)
 
-    def update_root(self, x):
-        while x.getParent() is not None:
-            x = x.getParent()
-        self.setRoot(x)
+    """set the root of the tree to be the given node
+    @type node: AVLNode
+    @param node: the node to be the root of the tree
+    """
+
+    def update_root(self, node):
+        while node.getParent() is not None:
+            node = node.getParent()
+        self.setRoot(node)
 
     """searches for a *value* in the list
 
