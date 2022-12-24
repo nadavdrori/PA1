@@ -744,9 +744,9 @@ class AVLTreeList(object):
         if self.empty():
             self.setRoot(lst.getRoot())
             self.size = lst.length()
-            return self.getHeight()
+            return lst.getRoot().getHeight() + 1
         if lst.empty():
-            return self.getRoot().getHeight()
+            return self.getRoot().getHeight() + 1
 
         height = self.getRoot().getHeight() - lst.getRoot().getHeight()
         if height >= 0:
