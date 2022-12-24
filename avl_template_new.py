@@ -437,6 +437,8 @@ class AVLTreeList(object):
         self.first_node = self.get_min_node_in_sub_of(self.getRoot())
         self.last_node = self.get_max_node_in_sub_of(self.getRoot())
         self.size -= 1
+        if not self.getRoot().isRealNode():
+            self.setRoot(None)
         return rotations_count
 
     """deletes the node in the list
