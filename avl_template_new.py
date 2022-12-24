@@ -718,14 +718,14 @@ class AVLTreeList(object):
         if height >= 0:
             tall_tree_connect_node = self.getRoot()
             low_tree_root = lst.getRoot()
-            x = self.last_node()
+            x = self.last_node
             self.delete_node(x)
             x.setParent(None)
             self.update_big_tree(low_tree_root, tall_tree_connect_node, x)
         else:
             low_tree_root = self.getRoot()
             tall_tree_connect_node = lst.getRoot()
-            x = self.last_node()
+            x = self.last_node
             self.delete_node(x)
             x.setParent(None)
             self.update_small_tree(low_tree_root, tall_tree_connect_node, x)
