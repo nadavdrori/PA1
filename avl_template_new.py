@@ -741,9 +741,13 @@ class AVLTreeList(object):
     """
 
     def concat(self, lst):
+        if self.empty() and lst.empty():
+            return 0
         if self.empty():
             self.setRoot(lst.getRoot())
             self.size = lst.length()
+            self.first_node = lst.first_node
+            self.last_node = lst.last_node
             return lst.getRoot().getHeight() + 1
         if lst.empty():
             return self.getRoot().getHeight() + 1
@@ -763,9 +767,12 @@ class AVLTreeList(object):
             self.delete_node(x)
             x.setParent(None)
             self.update_small_tree(low_tree_root, tall_tree_connect_node, x)
+        #TODO: THE TEST test_compare_concatinated_treelists_and_list_small fails here
+        self.rebalancing_tree(x)
         self.update_root(x)
         self.setSize(self.getRoot().getSize())
         height = abs(height)
+        self.first_node = self.get_min_node_in_sub_of(self.getRoot())
         self.last_node = self.get_max_node_in_sub_of(self.getRoot())
         return height
 
