@@ -433,7 +433,7 @@ class AVLTreeList(object):
         if self.empty():
             return 0
         node = self.retrieve_node(i)
-        rotations_count = self.delete_node(node)
+        rotations_count = self.delete_node_with_rotations(node)
         self.first_node = self.get_min_node_in_sub_of(self.getRoot())
         self.last_node = self.get_max_node_in_sub_of(self.getRoot())
         self.size -= 1
@@ -445,7 +445,7 @@ class AVLTreeList(object):
     @type node: AVLNode
     @param node: The intended node in the list to be deleted
     @rtype: int
-    @returns: the number of rebalancing operation due to AVL rebalancing
+    @returns: the deleted node
     """
 
     def delete_node(self, node):
@@ -455,7 +455,18 @@ class AVLTreeList(object):
             self.delete_node_with_single_son(node)
         else:
             node = self.delete_node_with_two_sons(node)
-        rotations_count = self.rebalancing_tree(node)
+        return node
+
+    """deletes the node in the list
+       @type node: AVLNode
+       @param node: The intended node in the list to be deleted
+       @rtype: int
+       @returns: the number of rebalancing operation due to AVL rebalancing
+       """
+
+    def delete_node_with_rotations(self, node):
+        deleted_node = self.delete_node(node)
+        rotations_count = self.rebalancing_tree(deleted_node)
         return rotations_count
 
     """deletes node which have single son
@@ -750,14 +761,14 @@ class AVLTreeList(object):
             tall_tree_connect_node = self.getRoot()
             low_tree_root = lst.getRoot()
             x = self.last_node
-            self.delete_node(x)
+            self.delete_node_with_rotations(x)
             x.setParent(None)
             self.update_big_tree(low_tree_root, tall_tree_connect_node, x)
         else:
             low_tree_root = self.getRoot()
             tall_tree_connect_node = lst.getRoot()
             x = self.last_node
-            self.delete_node(x)
+            self.delete_node_with_rotations(x)
             x.setParent(None)
             self.update_small_tree(low_tree_root, tall_tree_connect_node, x)
         self.update_root(x)

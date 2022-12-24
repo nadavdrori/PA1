@@ -64,6 +64,20 @@ def given_balanced_tree_when_delete_two_sons_element_then_rotate():
     print(lst.getRoot().getValue() == "f")
     print(lst.getRoot().getRight().getLeft().getValue() == "t")
 
+def given_balanced_tree_when_delete_two_sons_element_then_delete_successor():
+    lst = AVLTreeList()
+    lst.insert(0, "a")
+    lst.insert(0, "b")
+    lst.insert(2, "d")
+    lst.insert(1, "c")
+    lst.insert(3, "e")
+    lst.insert(0, "t")
+    lst.insert(2, "j")
+    lst.delete(1)
+    print(lst.getRoot().getValue() == "a")
+    print(lst.getRoot().getLeft().getRight().getValue() == "c")
+    print(lst.getRoot().getLeft().getValue() == "j")
+
 
 def given_balanced_tree_when_get_first_then_return_right_value():
     lst = AVLTreeList()
@@ -217,23 +231,23 @@ def given_balanced_tree_when_delete_all_and_insert_then_get_valid_single_item():
     lst.insert(0, "z")
     print(lst.getRoot().getValue() == "z")
 
+#
+# given_balanced_tree_when_delete_element_then_rotate()
+# given_list_when_retrieve_element_then_return_element()
+# given_balanced_tree_when_insert_element_then_rotate()
+# given_balanced_tree_when_delete_two_sons_element_then_rotate()
+# given_balanced_tree_when_delete_two_sons_element_then_delete()
+# given_balanced_tree_when_delete_one_son_element_then_rotate()
+given_balanced_tree_when_delete_two_sons_element_then_delete_successor()
+# given_balanced_tree_when_get_first_then_return_right_value()
+# given_balanced_tree_when_get_last_then_return_right_value()
+# given_sorted_lst_when_create_tree_then_get_valid_tree()
+# given_tree_when_convert_to_list_then_get_valid_list()
+# given_tree_when_sort_then_get_sorted_tree()
 
-given_balanced_tree_when_delete_element_then_rotate()
-given_list_when_retrieve_element_then_return_element()
-given_balanced_tree_when_insert_element_then_rotate()
-given_balanced_tree_when_delete_two_sons_element_then_rotate()
-given_balanced_tree_when_delete_two_sons_element_then_delete()
-given_balanced_tree_when_delete_one_son_element_then_rotate()
-
-given_balanced_tree_when_get_first_then_return_right_value()
-given_balanced_tree_when_get_last_then_return_right_value()
-given_sorted_lst_when_create_tree_then_get_valid_tree()
-given_tree_when_convert_to_list_then_get_valid_list()
-given_tree_when_sort_then_get_sorted_tree()
-
-print(test_concat())
-search_test()
-
-given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amount()
-test_shuffle()
-given_balanced_tree_when_delete_all_and_insert_then_get_valid_single_item()
+# print(test_concat())
+# search_test()
+#
+# given_tree_need_left_right_rotation_when_insert_then_get_valid_rotation_amount()
+# test_shuffle()
+# given_balanced_tree_when_delete_all_and_insert_then_get_valid_single_item()
