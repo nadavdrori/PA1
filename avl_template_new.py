@@ -193,6 +193,8 @@ class AVLTreeList(object):
     """
 
     def retrieve(self, i):
+        if self.empty():
+            return None
         return self.retrieve_node(i).getValue()
 
         """retrieves the i'th item in the list
@@ -212,7 +214,7 @@ class AVLTreeList(object):
     @pre: 0 <= i < self.length()
     @param i: rank in the tree
     @rtype: AVLNode
-    @returns: the current node in the tree
+    @returns: the node with rank of i in the tree
     """
 
     def select(self, node, i):
@@ -428,6 +430,8 @@ class AVLTreeList(object):
     """
 
     def delete(self, i):
+        if self.empty():
+            return 0
         node = self.retrieve_node(i)
         rotations_count = self.delete_node(node)
         self.first_node = self.get_min_node_in_sub_of(self.getRoot())
@@ -732,6 +736,13 @@ class AVLTreeList(object):
     """
 
     def concat(self, lst):
+        if self.empty():
+            self.setRoot(lst.getRoot())
+            self.size = lst.length()
+            return self.getHeight()
+        if lst.empty():
+            return self.getRoot().getHeight()
+
         height = self.getRoot().getHeight() - lst.getRoot().getHeight()
         if height >= 0:
             tall_tree_connect_node = self.getRoot()
