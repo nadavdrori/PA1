@@ -181,7 +181,7 @@ class AVLTreeList(object):
     """
 
     def empty(self):
-        return self.getRoot() is None
+        return self.getRoot() is None or self.getRoot().isRealNode() is False
 
     """retrieves the value of the i'th item in the list
 
@@ -189,10 +189,22 @@ class AVLTreeList(object):
     @pre: 0 <= i < self.length()
     @param i: index in the list
     @rtype: str
-    @returns: the the value of the i'th item in the list
+    @returns: the value of the i'th item in the list
     """
 
     def retrieve(self, i):
+        return self.retrieve_node(i).getValue()
+
+        """retrieves the i'th item in the list
+
+        @type i: int
+        @pre: 0 <= i < self.length()
+        @param i: index in the list
+        @rtype: AVLNode
+        @returns: the i'th item in the list
+        """
+
+    def retrieve_node(self, i):
         return self.select(self.getRoot(), i + 1)
 
     """ return the node with rank of i in the tree
@@ -246,7 +258,7 @@ class AVLTreeList(object):
     """
 
     def insert_in_middle(self, i, val):
-        curr_node = self.retrieve(i)
+        curr_node = self.retrieve_node(i)
         if curr_node.getLeft().getValue() is None:
             curr_node.setLeft(AVLNode(val))
             curr_node.getLeft().setParent(curr_node)
@@ -254,7 +266,7 @@ class AVLTreeList(object):
                 self.first_node = curr_node.getLeft()
             return curr_node.getLeft()
         else:
-            pred = self.retrieve(i - 1)
+            pred = self.retrieve_node(i - 1)
             pred.setRight(AVLNode(val))
             pred.getRight().setParent(pred)
             return pred.getRight()
@@ -284,7 +296,7 @@ class AVLTreeList(object):
     def get_max_node_in_sub_of(self, curr_node):
         if self.empty():
             return None
-        while curr_node.getRight().getValue() is not None:
+        while curr_node.getRight().isRealNode():
             curr_node = curr_node.getRight()
         return curr_node
 
@@ -298,7 +310,7 @@ class AVLTreeList(object):
     def get_min_node_in_sub_of(self, curr_node):
         if self.empty():
             return None
-        while curr_node.getLeft().getValue() is not None:
+        while curr_node.getLeft().isRealNode():
             curr_node = curr_node.getLeft()
         return curr_node
 
@@ -416,11 +428,12 @@ class AVLTreeList(object):
     """
 
     def delete(self, i):
-        node = self.retrieve(i)
-        deleted_node = self.delete_node(node)
+        node = self.retrieve_node(i)
+        rotations_count = self.delete_node(node)
         self.first_node = self.get_min_node_in_sub_of(self.getRoot())
         self.last_node = self.get_max_node_in_sub_of(self.getRoot())
-        return deleted_node
+        self.size -= 1
+        return rotations_count
 
     """deletes the node in the list
     @type node: AVLNode
@@ -436,7 +449,6 @@ class AVLTreeList(object):
             self.delete_node_with_single_son(node)
         else:
             node = self.delete_node_with_two_sons(node)
-        self.size -= 1
         rotations_count = self.rebalancing_tree(node)
         return rotations_count
 
@@ -451,16 +463,22 @@ class AVLTreeList(object):
         else:
             node_to_connect = node.getRight()
         node_to_connect.setParent(node.getParent())
-        if node.getParent().getLeft() == node:
-            node.getParent().setLeft(node_to_connect)
+        if node.getParent() is not None:
+            if node.getParent().getLeft() == node:
+                node.getParent().setLeft(node_to_connect)
+            else:
+                node.getParent().setRight(node_to_connect)
         else:
-            node.getParent().setRight(node_to_connect)
+            self.setRoot(node_to_connect)
 
     def delete_leaf(self, node):
-        if node.getParent().getLeft() == node:
-            node.getParent().setLeft(AVLNode(None, node.getParent()))
+        if node.getParent() is not None:
+            if node.getParent().getLeft() == node:
+                node.getParent().setLeft(AVLNode(None, node.getParent()))
+            else:
+                node.getParent().setRight(AVLNode(None, node.getParent()))
         else:
-            node.getParent().setRight(AVLNode(None, node.getParent()))
+            self.setRoot(AVLNode(None))
 
     """deletes node which have two sons
         @type node: AVLNode
