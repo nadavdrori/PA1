@@ -434,8 +434,8 @@ class AVLTreeList(object):
             return 0
         node = self.retrieve_node(i)
         rotations_count = self.delete_node(node)
-        self.first_node = self.get_min_node_in_sub_of(self.getRoot())
-        self.last_node = self.get_max_node_in_sub_of(self.getRoot())
+        # self.first_node = self.get_min_node_in_sub_of(self.getRoot())
+        # self.last_node = self.get_max_node_in_sub_of(self.getRoot())
         self.size -= 1
         if not self.getRoot().isRealNode():
             self.setRoot(None)
@@ -478,6 +478,11 @@ class AVLTreeList(object):
             self.setRoot(node_to_connect)
 
     def delete_leaf(self, node):
+        if node is self.first_node:
+            self.first_node = self.successor(node)
+        if node is self.last_node:
+            self.last_node = self.predecessor(node)
+
         if node.getParent() is not None:
             if node.getParent().getLeft() == node:
                 node.getParent().setLeft(AVLNode(None, node.getParent()))
@@ -511,6 +516,21 @@ class AVLTreeList(object):
             return self.get_min_node_in_sub_of(node.getRight())
         else:
             while node.getParent() is not None and node == node.getParent().getRight():
+                node = node.getParent()
+            return node.getParent()
+
+    """ get the predecessor of the node
+            @type node: AVLNode
+            @param node: The intended node in the list to get its predecessor
+            @rtype: AVLNode
+            @returns: the predecessor of the node
+        """
+
+    def predecessor(self, node):
+        if node.getLeft().getValue() is not None:
+            return self.get_max_node_in_sub_of(node.getLeft())
+        else:
+            while node.getParent() is not None and node == node.getParent().getLeft():
                 node = node.getParent()
             return node.getParent()
 
