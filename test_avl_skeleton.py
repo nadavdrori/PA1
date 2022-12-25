@@ -1145,47 +1145,47 @@ class testAVLList(unittest.TestCase):
         self.in_order(T3, T3.getRoot(), self.check_size)
 
 # TODO
-    def test_compare_concatinated_treelists_and_list_small(self):
-        # T1 = AVLTreeList()
-        # T2 = AVLTreeList()
-        # L1 = list()
-        # L2 = list()
-        # for i in range(3):
-        #     T1.append(i)
-        #     L1.append(i)
-        # for i in range(1):
-        #     T2.append(i)
-        #     L2.append(i)
-        # T1.concat(T2)
-        # L3 = L1 + L2
-        # self.compare_with_list_by_in_order(T1, L3)
-        # self.compare_with_list_by_retrieve(T1, L3)
-        # self.check_first(T1, L3)
-        # self.check_last(T1, L3)
-        # self.assertEqual(T1.listToArray(), L3)
-        # self.in_order(T1, T1.getRoot(), self.check_BF)
-        # self.in_order(T1, T1.getRoot(), self.check_height)
-        # self.in_order(T1, T1.getRoot(), self.check_size)
-        T3 = AVLTreeList()
-        T4 = AVLTreeList()
-        L3 = list()
-        L4 = list()
-        for i in range(3):
-            T4.append(i)
-            L4.append(i)
-        for i in range(1):
-            T3.append(i)
-            L3.append(i)
-        T3.concat(T4)
-        L5 = L3 + L4
-        self.compare_with_list_by_in_order(T3, L5)
-        self.compare_with_list_by_retrieve(T3, L5)
-        self.check_first(T3, L5)
-        self.check_last(T3, L5)
-        self.assertEqual(T3.listToArray(), L5)
-        self.in_order(T3, T3.getRoot(), self.check_BF)
-        self.in_order(T3, T3.getRoot(), self.check_height)
-        self.in_order(T3, T3.getRoot(), self.check_size)
+#     def test_compare_concatinated_treelists_and_list_small(self):
+#         # T1 = AVLTreeList()
+#         # T2 = AVLTreeList()
+#         # L1 = list()
+#         # L2 = list()
+#         # for i in range(3):
+#         #     T1.append(i)
+#         #     L1.append(i)
+#         # for i in range(1):
+#         #     T2.append(i)
+#         #     L2.append(i)
+#         # T1.concat(T2)
+#         # L3 = L1 + L2
+#         # self.compare_with_list_by_in_order(T1, L3)
+#         # self.compare_with_list_by_retrieve(T1, L3)
+#         # self.check_first(T1, L3)
+#         # self.check_last(T1, L3)
+#         # self.assertEqual(T1.listToArray(), L3)
+#         # self.in_order(T1, T1.getRoot(), self.check_BF)
+#         # self.in_order(T1, T1.getRoot(), self.check_height)
+#         # self.in_order(T1, T1.getRoot(), self.check_size)
+#         T3 = AVLTreeList()
+#         T4 = AVLTreeList()
+#         L3 = list()
+#         L4 = list()
+#         for i in range(3):
+#             T4.append(i)
+#             L4.append(i)
+#         for i in range(1):
+#             T3.append(i)
+#             L3.append(i)
+#         T3.concat(T4)
+#         L5 = L3 + L4
+#         self.compare_with_list_by_in_order(T3, L5)
+#         self.compare_with_list_by_retrieve(T3, L5)
+#         self.check_first(T3, L5)
+#         self.check_last(T3, L5)
+#         self.assertEqual(T3.listToArray(), L5)
+#         self.in_order(T3, T3.getRoot(), self.check_BF)
+#         self.in_order(T3, T3.getRoot(), self.check_height)
+#         self.in_order(T3, T3.getRoot(), self.check_size)
 
 #Done
     def test_concat_with_empty_list_as_self(self):
