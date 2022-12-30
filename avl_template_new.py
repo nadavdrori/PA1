@@ -146,7 +146,7 @@ class AVLNode(object):
     """
 
     def isRealNode(self):
-        return self.value is not None
+        return self.value is not None and self.getLeft() is not None and self.getRight() is not None
 
 
 """
@@ -632,7 +632,7 @@ class AVLTreeList(object):
         return self.last_node.getValue()
 
     """returns an array representing list 
-
+    complexity: O(n)
     @rtype: list
     @returns: a list of strings representing the data structure
     """
@@ -642,7 +642,7 @@ class AVLTreeList(object):
         return self.listToArray_rec(self.getRoot(), lst)
 
     """insert the tree nodes to the given list
-
+    complexity: O(n)
     @type lst: list
     @param lst: the list to insert the tree nodes to
     @type node: AVLNode
@@ -669,7 +669,7 @@ class AVLTreeList(object):
         return self.size
 
     """sort the info values of the list
-
+    complexity: O(nlogn)
     @rtype: list
     @returns: an AVLTreeList where the values are sorted by the info of the original list.
     """
@@ -682,7 +682,7 @@ class AVLTreeList(object):
         return sorted_tree
 
     """sort the given list
-        
+    complexity: O(nlogn)    
     @type lst: list
     @param lst: the list to sort
     @type start: int
@@ -777,7 +777,7 @@ class AVLTreeList(object):
             return root_node
 
     """permute the info values of the list 
-
+    complexity: O(n)
     @rtype: list
     @returns: an AVLTreeList where the values are permuted randomly by the info of the original list. ##Use Randomness
     """
@@ -790,6 +790,7 @@ class AVLTreeList(object):
         return shuffled_tree
 
     """shuffle the given list
+    complexity: O(n)
     @type lst: list
     @param lst: the list to shuffle
     """
