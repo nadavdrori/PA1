@@ -236,6 +236,7 @@ class AVLTreeList(object):
 
     """inserts val at position i in the list
 
+    complexity - O(logn)
     @type i: int
     @pre: 0 <= i <= self.length()
     @param i: The intended index in the list to which we insert val
@@ -277,7 +278,7 @@ class AVLTreeList(object):
                 self.first_node = curr_node.getLeft()
             return curr_node.getLeft()
         else:
-            pred = self.retrieve_node(i - 1)
+            pred = self.predecessor(curr_node)
             pred.setRight(AVLNode(val))
             pred.getRight().setParent(pred)
             return pred.getRight()
@@ -476,6 +477,11 @@ class AVLTreeList(object):
     """
 
     def delete_node_with_single_son(self, node):
+        if node is self.first_node:
+            self.first_node = self.successor(node)
+        if node is self.last_node:
+            self.last_node = self.predecessor(node)
+
         if node.getLeft().isRealNode():
             node_to_connect = node.getLeft()
         else:
@@ -512,7 +518,6 @@ class AVLTreeList(object):
 
     def delete_node_with_two_sons(self, node):
         successor = self.successor(node)
-        # self.replacment(node, successor)
         if node.getRight() == successor:
             parentOfSuccessor = node.getParent()
         else:
@@ -534,7 +539,6 @@ class AVLTreeList(object):
         successor.setParent(node.getParent())
         successor.setLeft(node.getLeft())
         successor.setRight(node.getRight())
-        successor.setValue(node.getValue())
         successor.setHeight(node.getHeight())
         successor.setSize(node.getSize())
 
@@ -549,8 +553,8 @@ class AVLTreeList(object):
         node.getRight().setParent(successor)
         node.getLeft().setParent(successor)
 
-        node.setLeft(AVLNode(None,node))
-        node.setRight(AVLNode(None,node))
+        node.setLeft(AVLNode(None, node))
+        node.setRight(AVLNode(None, node))
         node.setParent(None)
         node.setValue(None)
         node.setHeight(0)
@@ -604,62 +608,6 @@ class AVLTreeList(object):
             while node.getParent() is not None and node == node.getParent().getLeft():
                 node = node.getParent()
             return node.getParent()
-
-    """ replace between two nodes
-        @type original_node: AVLNode
-        @param original_node: The intended node in the list to be replaced
-        @type new_node: AVLNode
-        @param new_node: The intended node in the list to replace
-    """
-
-    def replacment(self, original_node, new_node):
-        if self.last_node == original_node:
-            self.last_node = new_node
-        if self.first_node == original_node:
-            self.first_node = new_node
-
-        if self.last_node == new_node:
-            self.last_node = original_node
-        if self.first_node == new_node:
-            self.first_node = original_node
-
-        if self.getRoot() == original_node:
-            self.setRoot(new_node)
-        else:
-            if original_node.getParent().getLeft() == original_node:
-                original_node.getParent().setLeft(new_node)
-            else:
-                original_node.getParent().setRight(new_node)
-
-        new_node_parent = new_node.getParent()
-        new_node_left = new_node.getLeft()
-        new_node_right = new_node.getRight()
-        new_node_value = new_node.getValue()
-
-        new_node.setParent(original_node.getParent())
-        new_node.setLeft(original_node.getLeft())
-        new_node.setRight(original_node.getRight())
-        new_node.setValue(original_node.getValue())
-
-        original_node.getLeft().setParent(new_node)
-        original_node.getRight().setParent(new_node)
-
-        original_node.setParent(new_node_parent)
-        original_node.setLeft(new_node_left)
-        original_node.setRight(new_node_right)
-        original_node.setValue(new_node_value)
-        new_node_left.setParent(original_node)
-        new_node_right.setParent(original_node)
-
-        if self.getRoot() == new_node:
-            self.setRoot(original_node)
-        else:
-            if new_node_parent.getLeft() == new_node:
-                new_node_parent.setLeft(original_node)
-            else:
-                new_node_parent.setRight(original_node)
-        self.update_height_and_size(new_node)
-        self.update_height_and_size(original_node)
 
     """returns the value of the first item in the list
 
