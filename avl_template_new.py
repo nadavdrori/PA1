@@ -441,6 +441,7 @@ class AVLTreeList(object):
 
     def delete(self, i):
         if self.getRoot().getSize() != self.getSize():
+            # TODO: Remove this line after debugging
             self.update_height_and_size(self.getRoot())
         if self.empty():
             return 0
@@ -559,25 +560,6 @@ class AVLTreeList(object):
         node.setValue(None)
         node.setHeight(0)
         node.setSize(0)
-
-        # if node is self.first_node:
-        #     self.first_node = successor
-        # if node is self.last_node:
-        #     self.last_node = successor
-        #
-        # if node.getParent() is not None:
-        #     if node.getParent().getLeft() == node:
-        #         node.getParent().setLeft(successor)
-        #     else:
-        #         node.getParent().setRight(successor)
-        # else:
-        #     self.setRoot(successor)
-        #
-        # successor.setParent(node.getParent())
-        # successor.setLeft(node.getLeft())
-        # successor.setRight(node.getRight())
-        # successor.getLeft().setParent(successor)
-        # successor.getRight().setParent(successor)
 
     """ get the successor of the node
         @type node: AVLNode
