@@ -21,8 +21,8 @@ def insert_to_list_n_times(lst, n):
 def measure_deletes():
     lst = AVLTreeList()
     for index in range(1, 10):
-        # n = 1500 * (2 ** index)
-        n=200
+        n = 1500 * (2 ** index)
+        # n = 200
         insert_to_list_n_times(lst, n)
         print("index " + str(index) + " rotations: ")
         print(delete_from_list_n_times(lst, n))
@@ -31,9 +31,9 @@ def measure_deletes():
 
 def delete_from_list_n_times(lst, n):
     rotations_count = 0
-    for i in range(n-10):
-        # index = randint(1, n-i-3)
-        rotations_count += lst.delete(2)
+    for i in reversed(range(0,n)):
+        index = randint(0, i)
+        rotations_count += lst.delete(index)
     return rotations_count
 
 
