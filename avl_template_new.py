@@ -441,7 +441,6 @@ class AVLTreeList(object):
 
     def delete(self, i):
         if self.getRoot().getSize() != self.getSize():
-            # TODO: Remove this line after debugging
             self.update_height_and_size(self.getRoot())
         if self.empty():
             return 0
@@ -821,7 +820,6 @@ class AVLTreeList(object):
             self.delete_node(x)
             x.setParent(None)
             self.update_small_tree(low_tree_root, tall_tree_connect_node, x)
-        # TODO: THE TEST test_compare_concatinated_treelists_and_list_small fails here
         self.rebalancing_tree(x)
         self.update_root(x)
         self.setSize(self.getRoot().getSize())
